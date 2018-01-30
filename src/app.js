@@ -1,5 +1,3 @@
-"use strict";
-
 console.log("App.js is running!");
 
 // JSX - JavaScript XML
@@ -31,29 +29,17 @@ var user = {
   name: "Laura Unaeze",
   age: 28,
   location: "Phoenix, Arizona"
+}
 
-  // Completing his first challenge
-};var templateTwo = React.createElement(
-  "div",
-  null,
-  React.createElement(
-    "h1",
-    null,
-    user.name
-  ),
-  React.createElement(
-    "p",
-    null,
-    "Age: ",
-    user.age
-  ),
-  React.createElement(
-    "p",
-    null,
-    "Location: ",
-    user.location
-  )
+// Completing his first challenge
+var templateTwo = (
+  <div>
+    <h1>{user.name}</h1>
+    <p>Age: {user.age}</p>
+    <p>Location: {user.location}</p>
+  </div>
 );
+
 
 /* Andrew's Second Challenge, Section 3 Lecture 11
 1. Create app object with two properties: title and subtitle.
@@ -66,21 +52,13 @@ var user = {
 var challengeObj = {
   title: "Indecision App!",
   subtitle: "Reviewing React one step at a time."
-};
+}
 
-var templateThree = React.createElement(
-  "div",
-  null,
-  React.createElement(
-    "h1",
-    null,
-    challengeObj.title
-  ),
-  React.createElement(
-    "p",
-    null,
-    challengeObj.subtitle
-  )
+var templateThree = (
+  <div>
+    <h1>{challengeObj.title}</h1>
+    <p>{challengeObj.subtitle}</p>
+  </div>
 );
 
 var appRoot = document.getElementById('app');
