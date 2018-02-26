@@ -2,125 +2,6 @@
 
 console.log("App.js is running!");
 
-// JSX - JavaScript XML
-/*
-var template = (
-  <div>
-    <h1>Indecision App</h1>
-    <p>This is some info</p>
-    <ol>
-      <li>Learn to draw</li>
-      <li>Practice my coding skills</li>
-    </ol>
-  </div>
-);
-*/
-
-/*
-Andrew's challenge from section 3, Lesson 10:
-1. Create your own template variable: templateTwo. Do it as a JSX expression
-2. Inside templateTwo you need...
-  div
-    h1 -> First name
-    p -> Age: Your age
-    p -> Location: Your location
-3. Render templateTwo instead of template. 
-*/
-
-var user = {
-  name: "Laura Unaeze",
-  age: 28,
-  location: "Phoenix, Arizona"
-
-  /*
-  // Completing his first challenge
-  var templateTwo = (
-    <div>
-      <h1>{user.name}</h1>
-      <p>Age: {user.age}</p>
-      <p>Location: {user.location}</p>
-    </div>
-  );
-  */
-
-  /* Andrew's Second Challenge, Section 3 Lecture 11
-  1. Create app object with two properties: title and subtitle.
-     Both will be strings.
-  2. Use title and subtitle in the template
-  3. Render template
-  */
-
-  // Completeing his second challenge
-};var challengeObj = {
-  title: "Indecision App!",
-  subtitle: "Reviewing React one step at a time."
-};
-
-var templateThree = React.createElement(
-  "div",
-  null,
-  React.createElement(
-    "h1",
-    null,
-    challengeObj.title
-  ),
-  React.createElement(
-    "p",
-    null,
-    challengeObj.subtitle
-  )
-);
-
-// if statements
-// ternary operators
-// logical and operator
-
-
-function getLocation(location) {
-  // const getLocation = (location) => {
-  if (location) {
-    return React.createElement(
-      "p",
-      null,
-      "Location: ",
-      location
-    );
-  }
-  /* If no else statement is defined, 'return undefined' is implicitly stated.
-  else {
-    return undefined;
-  }
-  */
-}
-
-var templateTwo = React.createElement(
-  "div",
-  null,
-  React.createElement(
-    "h1",
-    null,
-    user.name ? user.name : "Anonymous"
-  ),
-  user.age && user.age >= 18 && React.createElement(
-    "p",
-    null,
-    "Age: ",
-    user.age
-  ),
-  getLocation(user.location)
-);
-
-/* Andrew's fourth challenge: Section 3, Lecture 12
-  1. only render the subtitle (and the p tag) if subtitle exists
-     Use logical 'and' operator
-  2. Conditionally render new p tag.
-     If options.length > 0 -> "Here are your options"
-     Else "No options"
-     Use ternary operator
-     (I set it to options.length > 1)
-*/
-
-// Completeing his fourth challenge
 var newChallengeObj = {
   title: "Indecision App!",
   subtitle: "Reviewing React one step at a time.",
@@ -166,6 +47,55 @@ var template = React.createElement(
   )
 );
 
+var count = 0;
+
+// for the onClick functions in templateTwo
+var addOne = function addOne() {
+  console.log("addOne");
+};
+
+var minusOne = function minusOne() {
+  console.log("minusOne");
+};
+
+var reset = function reset() {
+  console.log("reset");
+};
+
+var templateTwo = React.createElement(
+  "div",
+  null,
+  React.createElement(
+    "h1",
+    null,
+    "Count: ",
+    count
+  ),
+  React.createElement(
+    "button",
+    { onClick: addOne },
+    "+1"
+  ),
+  React.createElement(
+    "button",
+    { onClick: minusOne },
+    "-1"
+  ),
+  React.createElement(
+    "button",
+    { onClick: reset },
+    "RESET"
+  )
+);
+
+// ^^^
+// Andrew's Challenge for Section 3, Lecture 16
+// Make button "-1" - set up minusOne function,
+// register it as onClick, and log "minusOne"
+
+// Make reset button "reset" - set up reset function,
+// register it as onClick, and log "reset"
+
 var appRoot = document.getElementById('app');
 
-ReactDOM.render(template, appRoot);
+ReactDOM.render(templateTwo, appRoot);
