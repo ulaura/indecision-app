@@ -25,17 +25,18 @@ var app = {
   }
 };
 
-// Andrew's second challenge for this part
-// Create "Remove all" button above list
-// It will have an onClick handler
-// which will wipe the array and rerender
-
-var emptyArray = function emptyArray() {
+var onRemoveAll = function onRemoveAll() {
   app.options = [];
   render();
 };
 
-var numbers = [55, 101, 1000];
+var onMakeDecision = function onMakeDecision() {
+  var randomNumber = Math.floor(Math.random() * app.options.length);
+  var option = app.options[randomNumber];
+  alert(option);
+};
+
+var appRoot = document.getElementById('app');
 
 var render = function render() {
   var template = React.createElement(
@@ -57,13 +58,13 @@ var render = function render() {
       app.options.length > 0 ? "Here are your options:" : "There are no options."
     ),
     React.createElement(
-      "p",
-      null,
-      app.options.length
+      "button",
+      { disabled: app.options.length === 0, onClick: onMakeDecision },
+      "What Should I Do?"
     ),
     React.createElement(
       "button",
-      { onClick: emptyArray },
+      { onClick: onRemoveAll },
       "Remove All"
     ),
     React.createElement(
@@ -92,12 +93,4 @@ var render = function render() {
   ReactDOM.render(template, appRoot);
 };
 
-var appRoot = document.getElementById('app');
-
 render();
-
-// Andrew's first challenge for Section 3, Lecture 18
-
-// Create a render function that renders the new jsx
-// Call it right away
-// Call it after options array added to it

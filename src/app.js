@@ -24,17 +24,18 @@ const onFormSubmit = (e) => {
   }
 };
 
-// Andrew's second challenge for this part
-// Create "Remove all" button above list
-// It will have an onClick handler
-// which will wipe the array and rerender
-
-const emptyArray = () => {
+const onRemoveAll = () => {
   app.options = [];
   render();
 };
 
-const numbers = [55, 101, 1000];
+const onMakeDecision = () => {
+  const randomNumber = Math.floor(Math.random() * app.options.length);
+  const option = app.options[randomNumber];
+  alert(option);
+};
+
+const appRoot = document.getElementById('app');
 
 const render = () => {
   const template = (
@@ -43,23 +44,12 @@ const render = () => {
       {app.subtitle && <p>{app.subtitle}</p>}
       <p>{(app.options.length > 0) ? 
          `Here are your options:` : `There are no options.`}</p>
-      <p>{app.options.length}</p>
-      <button onClick={emptyArray}>Remove All</button>
+      {/* If app.options.length is 0, the 'What Should I Do?' button 
+          will be disabled */}
+      <button disabled={app.options.length === 0} onClick={onMakeDecision}>What Should I Do?</button>
+      <button onClick={onRemoveAll}>Remove All</button>
 
       <ol>
-        {/* Andrew's challenge - Section 3, Lecture 19
-        Map over app.opitions getting back an rray of list items
-        (set key and text) */}
-
-        {/*regular way*/}
-        {/*
-          app.options.map((option) => {
-            return <li key={option}>{option}</li>;
-          })
-          */
-        }
-
-        {/*simplified expression way*/}
         {
           app.options.map((option) => <li key={option}>{option}</li>)
         }
@@ -76,12 +66,4 @@ const render = () => {
   ReactDOM.render(template, appRoot);
 }
 
-const appRoot = document.getElementById('app');
-
 render();
-
-// Andrew's first challenge for Section 3, Lecture 18
-
-// Create a render function that renders the new jsx
-// Call it right away
-// Call it after options array added to it
