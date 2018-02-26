@@ -25,7 +25,7 @@ Andrew's challenge from section 3, Lesson 10:
 3. Render templateTwo instead of template. 
 */
 
-var user = {
+const user = {
   name: "Laura Unaeze",
   age: 28,
   location: "Phoenix, Arizona"
@@ -50,12 +50,12 @@ var templateTwo = (
 */
 
 // Completeing his second challenge
-var challengeObj = {
+const challengeObj = {
   title: "Indecision App!",
   subtitle: "Reviewing React one step at a time.",
 }
 
-var templateThree = (
+const templateThree = (
   <div>
     <h1>{challengeObj.title}</h1>
     <p>{challengeObj.subtitle}</p>
@@ -68,8 +68,8 @@ var templateThree = (
 // logical and operator
 
 
-// es5 function
 function getLocation(location) {
+// const getLocation = (location) => {
   if (location) {
     return <p>Location: {location}</p>;
   }
@@ -80,7 +80,7 @@ function getLocation(location) {
   */
 }
 
-var templateTwo = (
+const templateTwo = (
   <div>
     { /* Ternary expression. If user.name (the value before ?) exists (is true), render user.name,
          else render "Anonymous" */}
@@ -111,13 +111,13 @@ var templateTwo = (
 */
 
 // Completeing his fourth challenge
-var newChallengeObj = {
+const newChallengeObj = {
   title: "Indecision App!",
   subtitle: "Reviewing React one step at a time.",
   options: ["One", "Two"]
 }
 
-var template = (
+const template = (
   <div>
     <h1>Indecision App</h1>
     {newChallengeObj.subtitle && <p>{newChallengeObj.subtitle}</p>}
@@ -125,11 +125,12 @@ var template = (
        `Here are your options: ${newChallengeObj.options[0]} and ${newChallengeObj.options[1]}`: `There are no options.`}</p>
     <ol>
       <li>Learn to draw</li>
+      <li>Learn to sleep better</li>
       <li>Practice my coding skills</li>
     </ol>
   </div>
 );
 
-var appRoot = document.getElementById('app');
+const appRoot = document.getElementById('app');
 
 ReactDOM.render(template, appRoot);

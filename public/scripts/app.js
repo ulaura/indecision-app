@@ -76,8 +76,8 @@ var templateThree = React.createElement(
 // logical and operator
 
 
-// es5 function
 function getLocation(location) {
+  // const getLocation = (location) => {
   if (location) {
     return React.createElement(
       "p",
@@ -152,6 +152,11 @@ var template = React.createElement(
       "li",
       null,
       "Learn to draw"
+    ),
+    React.createElement(
+      "li",
+      null,
+      "Learn to sleep better"
     ),
     React.createElement(
       "li",
