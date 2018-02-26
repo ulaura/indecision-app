@@ -47,55 +47,60 @@ var template = React.createElement(
   )
 );
 
+// Andrew's Challenge for Section 3, Lecture 17
+// modify minusOne() and reset() to change the count
+// and rerender renderCounterApp()
+
 var count = 0;
 
 // for the onClick functions in templateTwo
 var addOne = function addOne() {
-  console.log("addOne");
+  count++;
+  renderCounterApp();
 };
 
 var minusOne = function minusOne() {
-  console.log("minusOne");
+  // subtract 1 from count and rerender
+  count--;
+  renderCounterApp();
 };
 
 var reset = function reset() {
-  console.log("reset");
+  // reset the count and rerender
+  count = 0;
+  renderCounterApp();
 };
-
-var templateTwo = React.createElement(
-  "div",
-  null,
-  React.createElement(
-    "h1",
-    null,
-    "Count: ",
-    count
-  ),
-  React.createElement(
-    "button",
-    { onClick: addOne },
-    "+1"
-  ),
-  React.createElement(
-    "button",
-    { onClick: minusOne },
-    "-1"
-  ),
-  React.createElement(
-    "button",
-    { onClick: reset },
-    "RESET"
-  )
-);
-
-// ^^^
-// Andrew's Challenge for Section 3, Lecture 16
-// Make button "-1" - set up minusOne function,
-// register it as onClick, and log "minusOne"
-
-// Make reset button "reset" - set up reset function,
-// register it as onClick, and log "reset"
 
 var appRoot = document.getElementById('app');
 
-ReactDOM.render(templateTwo, appRoot);
+var renderCounterApp = function renderCounterApp() {
+  var templateTwo = React.createElement(
+    "div",
+    null,
+    React.createElement(
+      "h1",
+      null,
+      "Count: ",
+      count
+    ),
+    React.createElement(
+      "button",
+      { onClick: addOne },
+      "+1"
+    ),
+    React.createElement(
+      "button",
+      { onClick: minusOne },
+      "-1"
+    ),
+    React.createElement(
+      "button",
+      { onClick: reset },
+      "RESET"
+    )
+  );
+
+  ReactDOM.render(templateTwo, appRoot);
+};
+
+renderCounterApp();

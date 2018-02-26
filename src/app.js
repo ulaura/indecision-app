@@ -20,40 +20,43 @@ const template = (
   </div>
 );
 
+// Andrew's Challenge for Section 3, Lecture 17
+// modify minusOne() and reset() to change the count
+// and rerender renderCounterApp()
+
 let count = 0;
 
 // for the onClick functions in templateTwo
 const addOne = () => {
-  console.log("addOne");
+  count++;
+  renderCounterApp();
 };
 
 const minusOne = () => {
-  console.log("minusOne");
+  // subtract 1 from count and rerender
+  count--;
+  renderCounterApp();
 };
 
 const reset = () => {
-  console.log("reset");
+  // reset the count and rerender
+  count = 0;
+  renderCounterApp();
 };
-
-
-const templateTwo = (
-  <div>
-    {/*we still have to make a count function*/}
-    <h1>Count: {count}</h1>
-    <button onClick={addOne}>+1</button>
-    <button onClick={minusOne}>-1</button>
-    <button onClick={reset}>RESET</button> 
-  </div>
-);
-
-// ^^^
-// Andrew's Challenge for Section 3, Lecture 16
-// Make button "-1" - set up minusOne function,
-// register it as onClick, and log "minusOne"
-
-// Make reset button "reset" - set up reset function,
-// register it as onClick, and log "reset"
 
 const appRoot = document.getElementById('app');
 
-ReactDOM.render(templateTwo, appRoot);
+const renderCounterApp = () => {
+  const templateTwo = (
+    <div>
+      <h1>Count: {count}</h1>
+      <button onClick={addOne}>+1</button>
+      <button onClick={minusOne}>-1</button>
+      <button onClick={reset}>RESET</button> 
+    </div>
+  );
+
+  ReactDOM.render(templateTwo, appRoot);
+};
+
+renderCounterApp();
