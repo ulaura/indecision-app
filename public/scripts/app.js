@@ -1,42 +1,25 @@
 "use strict";
 
-console.log("App.js is running!");
+// Build It! Challenge - End of Section 3
 
 var app = {
-  title: "Indecision App!",
-  subtitle: "Reviewing React one step at a time.",
-  options: []
+  buttonSwitch: ["Show Details", "Hide Details"]
+};
 
-  // e (for event) is commonly used as a parameter for form submissions
-};var onFormSubmit = function onFormSubmit(e) {
-  // prevrent full page refresh before form is submitted
-  e.preventDefault();
+var theButton = app.buttonSwitch[0];
 
-  // e.target - points to the element that the event started on
-  // elements - the list of elements held by the form's name 
-  // in this case, name is called "option"
-  // value - the value found in the input
-  var option = e.target.elements.option.value;
-
-  if (option) {
-    app.options.push(option);
-    e.target.elements.option.value = "";
+var changeThis = function changeThis() {
+  if (theButton === app.buttonSwitch[0]) {
+    theButton = app.buttonSwitch[1];
+    render();
+  } else {
+    theButton = app.buttonSwitch[0];
     render();
   }
+  console.log("You clicked " + theButton);
 };
 
-var onRemoveAll = function onRemoveAll() {
-  app.options = [];
-  render();
-};
-
-var onMakeDecision = function onMakeDecision() {
-  var randomNumber = Math.floor(Math.random() * app.options.length);
-  var option = app.options[randomNumber];
-  alert(option);
-};
-
-var appRoot = document.getElementById('app');
+var appRoot = document.getElementById("app");
 
 var render = function render() {
   var template = React.createElement(
@@ -45,51 +28,19 @@ var render = function render() {
     React.createElement(
       "h1",
       null,
-      "Indecision App"
-    ),
-    app.subtitle && React.createElement(
-      "p",
-      null,
-      app.subtitle
-    ),
-    React.createElement(
-      "p",
-      null,
-      app.options.length > 0 ? "Here are your options:" : "There are no options."
+      "Visibility Toggle"
     ),
     React.createElement(
       "button",
-      { disabled: app.options.length === 0, onClick: onMakeDecision },
-      "What Should I Do?"
+      { onClick: changeThis },
+      theButton
     ),
-    React.createElement(
-      "button",
-      { onClick: onRemoveAll },
-      "Remove All"
-    ),
-    React.createElement(
-      "ol",
+    theButton === app.buttonSwitch[0] ? null : React.createElement(
+      "p",
       null,
-      app.options.map(function (option) {
-        return React.createElement(
-          "li",
-          { key: option },
-          option
-        );
-      })
-    ),
-    React.createElement(
-      "form",
-      { onSubmit: onFormSubmit },
-      React.createElement("input", { type: "text", name: "option" }),
-      React.createElement(
-        "button",
-        null,
-        "Add Option"
-      )
+      "Here are some details!"
     )
   );
-
   ReactDOM.render(template, appRoot);
 };
 
