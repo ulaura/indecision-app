@@ -20,7 +20,7 @@ const onFormSubmit = (e) => {
   if (option) {
     app.options.push(option);
     e.target.elements.option.value = "";
-    renderThis();
+    render();
   }
 };
 
@@ -31,23 +31,38 @@ const onFormSubmit = (e) => {
 
 const emptyArray = () => {
   app.options = [];
-  renderThis();
+  render();
 };
 
-const renderThis = () => {
+const numbers = [55, 101, 1000];
+
+const render = () => {
   const template = (
     <div>
       <h1>Indecision App</h1>
       {app.subtitle && <p>{app.subtitle}</p>}
-      <p>{(app.options && app.options.length > 1) ? 
-         `Here are your options: ${app.options[0]} and ${app.options[1]}`: `There are no options.`}</p>
+      <p>{(app.options.length > 0) ? 
+         `Here are your options:` : `There are no options.`}</p>
       <p>{app.options.length}</p>
       <button onClick={emptyArray}>Remove All</button>
 
       <ol>
-        <li>Learn to draw</li>
-        <li>Learn to sleep better</li>
-        <li>Practice my coding skills</li>
+        {/* Andrew's challenge - Section 3, Lecture 19
+        Map over app.opitions getting back an rray of list items
+        (set key and text) */}
+
+        {/*regular way*/}
+        {/*
+          app.options.map((option) => {
+            return <li key={option}>{option}</li>;
+          })
+          */
+        }
+
+        {/*simplified expression way*/}
+        {
+          app.options.map((option) => <li key={option}>{option}</li>)
+        }
       </ol>
   
       {/* you want to reference onFormSubmit, NOT call it as onFormSubmit()*/}
@@ -63,7 +78,7 @@ const renderThis = () => {
 
 const appRoot = document.getElementById('app');
 
-renderThis();
+render();
 
 // Andrew's first challenge for Section 3, Lecture 18
 

@@ -21,7 +21,7 @@ var app = {
   if (option) {
     app.options.push(option);
     e.target.elements.option.value = "";
-    renderThis();
+    render();
   }
 };
 
@@ -32,10 +32,12 @@ var app = {
 
 var emptyArray = function emptyArray() {
   app.options = [];
-  renderThis();
+  render();
 };
 
-var renderThis = function renderThis() {
+var numbers = [55, 101, 1000];
+
+var render = function render() {
   var template = React.createElement(
     "div",
     null,
@@ -52,7 +54,7 @@ var renderThis = function renderThis() {
     React.createElement(
       "p",
       null,
-      app.options && app.options.length > 1 ? "Here are your options: " + app.options[0] + " and " + app.options[1] : "There are no options."
+      app.options.length > 0 ? "Here are your options:" : "There are no options."
     ),
     React.createElement(
       "p",
@@ -67,21 +69,13 @@ var renderThis = function renderThis() {
     React.createElement(
       "ol",
       null,
-      React.createElement(
-        "li",
-        null,
-        "Learn to draw"
-      ),
-      React.createElement(
-        "li",
-        null,
-        "Learn to sleep better"
-      ),
-      React.createElement(
-        "li",
-        null,
-        "Practice my coding skills"
-      )
+      app.options.map(function (option) {
+        return React.createElement(
+          "li",
+          { key: option },
+          option
+        );
+      })
     ),
     React.createElement(
       "form",
@@ -100,7 +94,7 @@ var renderThis = function renderThis() {
 
 var appRoot = document.getElementById('app');
 
-renderThis();
+render();
 
 // Andrew's first challenge for Section 3, Lecture 18
 
