@@ -1,62 +1,72 @@
 console.log("App.js is running!");
 
-const newChallengeObj = {
+const app = {
   title: "Indecision App!",
   subtitle: "Reviewing React one step at a time.",
-  options: ["One", "Two"]
+  options: []
 }
 
-const template = (
-  <div>
-    <h1>Indecision App</h1>
-    {newChallengeObj.subtitle && <p>{newChallengeObj.subtitle}</p>}
-    <p>{(newChallengeObj.options && newChallengeObj.options.length > 1) ? 
-       `Here are your options: ${newChallengeObj.options[0]} and ${newChallengeObj.options[1]}`: `There are no options.`}</p>
-    <ol>
-      <li>Learn to draw</li>
-      <li>Learn to sleep better</li>
-      <li>Practice my coding skills</li>
-    </ol>
-  </div>
-);
+// e (for event) is commonly used as a parameter for form submissions
+const onFormSubmit = (e) => {
+  // prevrent full page refresh before form is submitted
+  e.preventDefault();
 
-// Andrew's Challenge for Section 3, Lecture 17
-// modify minusOne() and reset() to change the count
-// and rerender renderCounterApp()
+  // e.target - points to the element that the event started on
+  // elements - the list of elements held by the form's name 
+  // in this case, name is called "option"
+  // value - the value found in the input
+  const option = e.target.elements.option.value;
 
-let count = 0;
-
-// for the onClick functions in templateTwo
-const addOne = () => {
-  count++;
-  renderCounterApp();
+  if (option) {
+    app.options.push(option);
+    e.target.elements.option.value = "";
+    renderThis();
+  }
 };
 
-const minusOne = () => {
-  // subtract 1 from count and rerender
-  count--;
-  renderCounterApp();
+// Andrew's second challenge for this part
+// Create "Remove all" button above list
+// It will have an onClick handler
+// which will wipe the array and rerender
+
+const emptyArray = () => {
+  app.options = [];
+  renderThis();
 };
 
-const reset = () => {
-  // reset the count and rerender
-  count = 0;
-  renderCounterApp();
-};
-
-const appRoot = document.getElementById('app');
-
-const renderCounterApp = () => {
-  const templateTwo = (
+const renderThis = () => {
+  const template = (
     <div>
-      <h1>Count: {count}</h1>
-      <button onClick={addOne}>+1</button>
-      <button onClick={minusOne}>-1</button>
-      <button onClick={reset}>RESET</button> 
+      <h1>Indecision App</h1>
+      {app.subtitle && <p>{app.subtitle}</p>}
+      <p>{(app.options && app.options.length > 1) ? 
+         `Here are your options: ${app.options[0]} and ${app.options[1]}`: `There are no options.`}</p>
+      <p>{app.options.length}</p>
+      <button onClick={emptyArray}>Remove All</button>
+
+      <ol>
+        <li>Learn to draw</li>
+        <li>Learn to sleep better</li>
+        <li>Practice my coding skills</li>
+      </ol>
+  
+      {/* you want to reference onFormSubmit, NOT call it as onFormSubmit()*/}
+      <form onSubmit={onFormSubmit}>
+        <input type="text" name="option"/>
+        <button>Add Option</button>
+      </form>
     </div>
   );
 
-  ReactDOM.render(templateTwo, appRoot);
-};
+  ReactDOM.render(template, appRoot);
+}
 
-renderCounterApp();
+const appRoot = document.getElementById('app');
+
+renderThis();
+
+// Andrew's first challenge for Section 3, Lecture 18
+
+// Create a render function that renders the new jsx
+// Call it right away
+// Call it after options array added to it
