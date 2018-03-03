@@ -4,6 +4,21 @@
 // Also, React components MUST be named with an uppercase first letter
 // (whereas non-React ES6 classes can be named ith a lowercase first letter).
 // The uppercase letter tells React it's a class and not an html element.
+
+// This class has other classes nested inside it.
+class IndecsionApp extends React.Component {
+  render() {
+    return (
+      <div>
+        <Header />
+        <Action />
+        <Options />
+        <AddOption />
+      </div>
+    );
+  }
+}
+
 class Header extends React.Component{
   render() {
     return (
@@ -25,14 +40,27 @@ class Action extends React.Component {
   }
 }
 
-// Andrew's challenge
-// Create two more React components
-// 1. Options - Static text: Options component here
-// 2. AddOption -> Static text: AddOption component here
-
 class Options extends React.Component {
   render() {
-    return <p>Options component here.</p>;
+    return (
+      <div>
+        Options Component Here.
+        <Option />
+      </div>
+    );
+  }
+}
+
+// Andrew's challenge for Section 4, Lecture 27
+// Create an Option React class and render it inside Options above.
+// Option -> Static text: Option Component here.
+class Option extends React.Component {
+  render() {
+    return (
+      <div>
+        Option Component Here
+      </div>
+    );
   }
 }
 
@@ -42,14 +70,5 @@ class AddOption extends React.Component {
   }
 }
 
-const jsx = (
-  <div>
-    <Header />
-    <Action />
-    <Options />
-    <AddOption />
-
-  </div>
-);
-
-ReactDOM.render(jsx, document.getElementById("app"));
+// You can render React classes directly in ReactDOM.render()
+ReactDOM.render(<IndecsionApp />, document.getElementById("app"));
