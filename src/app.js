@@ -1,33 +1,14 @@
-// Section 4, Lecture 30 - Method Binding
+// From Section 4, Lecture 31 - What is Component State?
 
-// bind() is a way to fix the this-binding that gets lost when methods
-// are called a certain way, such as with onClick / onSubmit event handlers.
-const obj = {
-  name: "Vikram",
-  getName() {
-    return this.name;
-  }
-};
+// Component state allows our components to manage data.
+// Once the data changes, the component will automatically rerender
+// to reflect those changes.
+// Compare it to jsx-indecision.js where render() had to be manually
+// called when a function was called and changed some data in our app.
 
-// Here, there is no error. It's referencing the method in
-// the object obj. 
-// console.log(obj.getName());
+// Not much change in code this time.
+// Next lecture, #32, we're working on counter-example.js
 
-// In this context, this is a regular function, NOT an object,
-// so the 'this' loses its binding.
-// const getName = obj.getName;
-// console.log(getName());
-
-// Here, we use bind and pass obj so we can fix the this-binding we lost earlier. 
-// const getName = obj.getName.bind(obj); 
-// console.log(getName());
-
-// We can pass anything in bind()
-const getName = obj.getName.bind({name: "Laura"});
-console.log(getName());
-
-
-// ***********************************************************
 class IndecsionApp extends React.Component {
   render() {
     const title = "Indecision";

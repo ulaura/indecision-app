@@ -8,76 +8,37 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-// Section 4, Lecture 30 - Method Binding
+// Section 4, Lecture 32 - Adding State to Counter App: Part I
+var Counter = function (_React$Component) {
+  _inherits(Counter, _React$Component);
 
-// bind() is a way to fix the this-binding that gets lost when methods
-// are called a certain way, such as with onClick / onSubmit event handlers.
-var obj = {
-  name: "Vikram",
-  getName: function getName() {
-    return this.name;
-  }
-};
+  function Counter(props) {
+    _classCallCheck(this, Counter);
 
-// Here, there is no error. It's referencing the method in
-// the object obj. 
-// console.log(obj.getName());
+    var _this = _possibleConstructorReturn(this, (Counter.__proto__ || Object.getPrototypeOf(Counter)).call(this, props));
 
-// In this context, this is a regular function, NOT an object,
-// so the 'this' loses its binding.
-// const getName = obj.getName;
-// console.log(getName());
-
-// Here, we use bind and pass obj so we can fix the this-binding we lost earlier. 
-// const getName = obj.getName.bind(obj); 
-// console.log(getName());
-
-// We can pass anything in bind()
-var getName = obj.getName.bind({ name: "Laura" });
-console.log(getName());
-
-// ***********************************************************
-
-var IndecsionApp = function (_React$Component) {
-  _inherits(IndecsionApp, _React$Component);
-
-  function IndecsionApp() {
-    _classCallCheck(this, IndecsionApp);
-
-    return _possibleConstructorReturn(this, (IndecsionApp.__proto__ || Object.getPrototypeOf(IndecsionApp)).apply(this, arguments));
+    _this.handleAddOne = _this.handleAddOne.bind(_this);
+    _this.handleMinusOne = _this.handleMinusOne.bind(_this);
+    _this.handleReset = _this.handleReset.bind(_this);
+    return _this;
   }
 
-  _createClass(IndecsionApp, [{
-    key: "render",
-    value: function render() {
-      var title = "Indecision";
-      var subtitle = "Put your life in the hands of a computer";
-      var options = ["Thing One", "Thing Two", "Thing Four"];
-
-      return React.createElement(
-        "div",
-        null,
-        React.createElement(Header, { title: title, subtitle: subtitle }),
-        React.createElement(Action, null),
-        React.createElement(Options, { options: options }),
-        React.createElement(AddOption, null)
-      );
+  _createClass(Counter, [{
+    key: "handleAddOne",
+    value: function handleAddOne() {
+      console.log("handleAddOne");
     }
-  }]);
-
-  return IndecsionApp;
-}(React.Component);
-
-var Header = function (_React$Component2) {
-  _inherits(Header, _React$Component2);
-
-  function Header() {
-    _classCallCheck(this, Header);
-
-    return _possibleConstructorReturn(this, (Header.__proto__ || Object.getPrototypeOf(Header)).apply(this, arguments));
-  }
-
-  _createClass(Header, [{
+  }, {
+    key: "handleMinusOne",
+    value: function handleMinusOne() {
+      console.log("handleMinusOne");
+    }
+  }, {
+    key: "handleReset",
+    value: function handleReset() {
+      console.log("handleReset");
+    }
+  }, {
     key: "render",
     value: function render() {
       return React.createElement(
@@ -86,169 +47,70 @@ var Header = function (_React$Component2) {
         React.createElement(
           "h1",
           null,
-          this.props.title
+          "Count: "
         ),
         React.createElement(
-          "h2",
-          null,
-          this.props.subtitle
-        )
-      );
-    }
-  }]);
-
-  return Header;
-}(React.Component);
-
-var Action = function (_React$Component3) {
-  _inherits(Action, _React$Component3);
-
-  function Action() {
-    _classCallCheck(this, Action);
-
-    return _possibleConstructorReturn(this, (Action.__proto__ || Object.getPrototypeOf(Action)).apply(this, arguments));
-  }
-
-  _createClass(Action, [{
-    key: "handlePick",
-    value: function handlePick() {
-      alert("handlePick");
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      return React.createElement(
-        "div",
-        null,
+          "button",
+          { onClick: this.handleAddOne },
+          "+1"
+        ),
         React.createElement(
           "button",
-          { onClick: this.handlePick },
-          "What should I do?"
-        )
-      );
-    }
-  }]);
-
-  return Action;
-}(React.Component);
-
-var Options = function (_React$Component4) {
-  _inherits(Options, _React$Component4);
-
-  // We are overriding React's constructor method with our custom one
-  // for Options. 
-  // We call it with props because React calls its constructor with props
-  function Options(props) {
-    _classCallCheck(this, Options);
-
-    // we bind 'this' here so we don't have to bind it every time we use
-    // this.handleRemoveAll within Options
-    var _this4 = _possibleConstructorReturn(this, (Options.__proto__ || Object.getPrototypeOf(Options)).call(this, props));
-    // Remember we call super() to pull down all the functionality
-    // of React's constructor method.
-
-
-    _this4.handleRemoveAll = _this4.handleRemoveAll.bind(_this4);
-    return _this4;
-  }
-
-  _createClass(Options, [{
-    key: "handleRemoveAll",
-    value: function handleRemoveAll() {
-      console.log(this.props.options);
-      // alert("Remove all the options!");
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      return React.createElement(
-        "div",
-        null,
-        this.props.options.map(function (option) {
-          return React.createElement(Option, { key: option, optionText: option });
-        }),
+          { onClick: this.handleMinusOne },
+          "-1"
+        ),
         React.createElement(
           "button",
-          { onClick: this.handleRemoveAll },
-          "Remove All"
+          { onClick: this.handleReset },
+          "RESET"
         )
       );
     }
   }]);
 
-  return Options;
+  return Counter;
 }(React.Component);
 
-var Option = function (_React$Component5) {
-  _inherits(Option, _React$Component5);
+// Andrew's Challenge for Section 4, Leson 32
+// Create three methods handleAddOne, handleMinusOne, handleReset
+// Use console.log to print the mehtod name.
+// Wire up onClick for all three buttons and bind in the constructor
 
-  function Option() {
-    _classCallCheck(this, Option);
+ReactDOM.render(React.createElement(Counter, null), document.getElementById("app"));
 
-    return _possibleConstructorReturn(this, (Option.__proto__ || Object.getPrototypeOf(Option)).apply(this, arguments));
-  }
+// // Code from Section 3, Lecture 17
+// let count = 0;
 
-  _createClass(Option, [{
-    key: "render",
-    value: function render() {
-      return React.createElement(
-        "div",
-        null,
-        "Option: ",
-        this.props.optionText
-      );
-    }
-  }]);
+// // for the onClick functions in templateTwo
+// const addOne = () => {
+//   count++;
+//   renderCounterApp();
+// };
 
-  return Option;
-}(React.Component);
+// const minusOne = () => {
+//   // subtract 1 from count and rerender
+//   count--;
+//   renderCounterApp();
+// };
 
-var AddOption = function (_React$Component6) {
-  _inherits(AddOption, _React$Component6);
+// const reset = () => {
+//   // reset the count and rerender
+//   count = 0;
+//   renderCounterApp();
+// };
 
-  function AddOption() {
-    _classCallCheck(this, AddOption);
 
-    return _possibleConstructorReturn(this, (AddOption.__proto__ || Object.getPrototypeOf(AddOption)).apply(this, arguments));
-  }
+// const renderCounterApp = () => {
+//   const templateTwo = (
+//     <div>
+//       <h1>Count: {count}</h1>
+//       <button onClick={addOne}>+1</button>
+//       <button onClick={minusOne}>-1</button>
+//       <button onClick={reset}>RESET</button> 
+//     </div>
+//   );
 
-  _createClass(AddOption, [{
-    key: "handleAddOption",
+//   ReactDOM.render(templateTwo, appRoot);
+// };
 
-    // The method for the form. Remember it has to take in an argument
-    // so we can use the event so we know what was passed in with the form.
-    value: function handleAddOption(e) {
-      e.preventDefault();
-
-      // .trim() removes leading and trailing spaces
-      var theOption = e.target.elements.theOption.value.trim();
-
-      if (theOption) {
-        alert(theOption);
-        e.target.elements.theOption.value = "";
-      }
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      return React.createElement(
-        "div",
-        null,
-        React.createElement(
-          "form",
-          { onSubmit: this.handleAddOption },
-          React.createElement("input", { type: "text", name: "theOption" }),
-          React.createElement(
-            "button",
-            null,
-            "Add Option"
-          )
-        )
-      );
-    }
-  }]);
-
-  return AddOption;
-}(React.Component);
-
-ReactDOM.render(React.createElement(IndecsionApp, null), document.getElementById("app"));
+// renderCounterApp();
