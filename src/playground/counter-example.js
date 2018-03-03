@@ -1,28 +1,59 @@
-// Section 4, Lecture 32 - Adding State to Counter App: Part I
+// Section 4, Lecture 33 - Adding State to Counter App: Part II
 class Counter extends React.Component {
   constructor(props) {
     super(props);
     this.handleAddOne = this.handleAddOne.bind(this);
     this.handleMinusOne = this.handleMinusOne.bind(this);
     this.handleReset = this.handleReset.bind(this);
+
+    // setting the default state
+    this.state = {
+      count: 0
+    }
   }
 
   handleAddOne() {
-    console.log("handleAddOne");
+    // // this adds one to count, but it does not update the state.
+    // this.state.count++;
+    // console.log(this.state);
+  
+    // To update the state, this.setState() has to be called
+    // and then the specific previous state value that needs to change 
+    // has to be passed as an argument to be manipulated
+    this.setState((prevState) => {
+      return {
+        count: prevState.count + 1
+      };
+    });
   }
 
+  // Andrew's challenge for Section 4, Lecture 33
+  // call this.setState to decrement the count by 1
   handleMinusOne() {
-    console.log("handleMinusOne");
+    this.setState((prevState) => {
+      return {
+        count: prevState.count - 1
+      };
+    });
   }
 
   handleReset() {
-    console.log("handleReset");
+    // Because handleReset brings the count to 0 no matter what,
+    // we don't care about the previous state, so we don't have
+    // to pass any arguments in this.setState()
+    this.setState(() => {
+      return {
+        count: 0
+      };
+    });
   }
 
   render(){
     return(
       <div>
-        <h1>Count: </h1>
+        {/* this.state.count accesses the value for count 
+            in state we set above */}
+        <h1>Count: {this.state.count}</h1>
         <button onClick={this.handleAddOne}>+1</button>
         <button onClick={this.handleMinusOne}>-1</button>
         <button onClick={this.handleReset}>RESET</button>
@@ -30,11 +61,6 @@ class Counter extends React.Component {
     );
   }
 }
-
-// Andrew's Challenge for Section 4, Leson 32
-// Create three methods handleAddOne, handleMinusOne, handleReset
-// Use console.log to print the mehtod name.
-// Wire up onClick for all three buttons and bind in the constructor
 
 ReactDOM.render(<Counter />, document.getElementById("app"));
 

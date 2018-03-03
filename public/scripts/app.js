@@ -8,7 +8,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-// Section 4, Lecture 32 - Adding State to Counter App: Part I
+// Section 4, Lecture 33 - Adding State to Counter App: Part II
 var Counter = function (_React$Component) {
   _inherits(Counter, _React$Component);
 
@@ -20,23 +20,54 @@ var Counter = function (_React$Component) {
     _this.handleAddOne = _this.handleAddOne.bind(_this);
     _this.handleMinusOne = _this.handleMinusOne.bind(_this);
     _this.handleReset = _this.handleReset.bind(_this);
+
+    // setting the default state
+    _this.state = {
+      count: 0
+    };
     return _this;
   }
 
   _createClass(Counter, [{
     key: "handleAddOne",
     value: function handleAddOne() {
-      console.log("handleAddOne");
+      // // this adds one to count, but it does not update the state.
+      // this.state.count++;
+      // console.log(this.state);
+
+      // To update the state, this.setState() has to be called
+      // and then the specific previous state value that needs to change 
+      // has to be passed as an argument to be manipulated
+      this.setState(function (prevState) {
+        return {
+          count: prevState.count + 1
+        };
+      });
     }
+
+    // Andrew's challenge for Section 4, Lecture 33
+    // call this.setState to decrement the count by 1
+
   }, {
     key: "handleMinusOne",
     value: function handleMinusOne() {
-      console.log("handleMinusOne");
+      this.setState(function (prevState) {
+        return {
+          count: prevState.count - 1
+        };
+      });
     }
   }, {
     key: "handleReset",
     value: function handleReset() {
-      console.log("handleReset");
+      // Because handleReset brings the count to 0 no matter what,
+      // we don't care about the previous state, so we don't have
+      // to pass any arguments in this.setState()
+      this.setState(function () {
+        return {
+          count: 0
+        };
+      });
     }
   }, {
     key: "render",
@@ -47,7 +78,8 @@ var Counter = function (_React$Component) {
         React.createElement(
           "h1",
           null,
-          "Count: "
+          "Count: ",
+          this.state.count
         ),
         React.createElement(
           "button",
@@ -70,11 +102,6 @@ var Counter = function (_React$Component) {
 
   return Counter;
 }(React.Component);
-
-// Andrew's Challenge for Section 4, Leson 32
-// Create three methods handleAddOne, handleMinusOne, handleReset
-// Use console.log to print the mehtod name.
-// Wire up onClick for all three buttons and bind in the constructor
 
 ReactDOM.render(React.createElement(Counter, null), document.getElementById("app"));
 
