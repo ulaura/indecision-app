@@ -1,69 +1,55 @@
-console.log("App.js is running!");
-
-const app = {
-  title: "Indecision App!",
-  subtitle: "Reviewing React one step at a time.",
-  options: []
-}
-
-// e (for event) is commonly used as a parameter for form submissions
-const onFormSubmit = (e) => {
-  // prevrent full page refresh before form is submitted
-  e.preventDefault();
-
-  // e.target - points to the element that the event started on
-  // elements - the list of elements held by the form's name 
-  // in this case, name is called "option"
-  // value - the value found in the input
-  const option = e.target.elements.option.value;
-
-  if (option) {
-    app.options.push(option);
-    e.target.elements.option.value = "";
-    render();
+// React components are just ES6 classes that extend something defined
+// in React.
+// With React components, render() MUST be defined.
+// Also, React components MUST be named with an uppercase first letter
+// (whereas non-React ES6 classes can be named ith a lowercase first letter).
+// The uppercase letter tells React it's a class and not an html element.
+class Header extends React.Component{
+  render() {
+    return (
+      <div>
+        <h1>Indecision</h1>
+        <h2>Put your life in the hands of a computer</h2>
+      </div>
+    );
   }
-};
-
-const onRemoveAll = () => {
-  app.options = [];
-  render();
-};
-
-const onMakeDecision = () => {
-  const randomNumber = Math.floor(Math.random() * app.options.length);
-  const option = app.options[randomNumber];
-  alert(option);
-};
-
-const appRoot = document.getElementById('app');
-
-const render = () => {
-  const template = (
-    <div>
-      <h1>Indecision App</h1>
-      {app.subtitle && <p>{app.subtitle}</p>}
-      <p>{(app.options.length > 0) ? 
-         `Here are your options:` : `There are no options.`}</p>
-      {/* If app.options.length is 0, the 'What Should I Do?' button 
-          will be disabled */}
-      <button disabled={app.options.length === 0} onClick={onMakeDecision}>What Should I Do?</button>
-      <button onClick={onRemoveAll}>Remove All</button>
-
-      <ol>
-        {
-          app.options.map((option) => <li key={option}>{option}</li>)
-        }
-      </ol>
-  
-      {/* you want to reference onFormSubmit, NOT call it as onFormSubmit()*/}
-      <form onSubmit={onFormSubmit}>
-        <input type="text" name="option"/>
-        <button>Add Option</button>
-      </form>
-    </div>
-  );
-
-  ReactDOM.render(template, appRoot);
 }
 
-render();
+class Action extends React.Component {
+  render() {
+    return (
+      <div>
+        <button>What should I do?</button>
+      </div>
+    );
+  }
+}
+
+// Andrew's challenge
+// Create two more React components
+// 1. Options - Static text: Options component here
+// 2. AddOption -> Static text: AddOption component here
+
+class Options extends React.Component {
+  render() {
+    return <p>Options component here.</p>;
+  }
+}
+
+class AddOption extends React.Component {
+  render() {
+    return <p>AddOption component here.</p>;
+  }
+}
+
+const jsx = (
+  <div>
+    <Header />
+    <Action />
+    <Options />
+    <AddOption />
+
+  </div>
+);
+
+ReactDOM.render(jsx, document.getElementById("app"));
