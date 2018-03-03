@@ -1,18 +1,20 @@
-// React components are just ES6 classes that extend something defined
-// in React.
-// With React components, render() MUST be defined.
-// Also, React components MUST be named with an uppercase first letter
-// (whereas non-React ES6 classes can be named ith a lowercase first letter).
-// The uppercase letter tells React it's a class and not an html element.
-
-// This class has other classes nested inside it.
+// Section 4, Lecture 28 - Component Props
+// Props allows data to be transfered from one React component to another
 class IndecsionApp extends React.Component {
   render() {
+    const title = "Indecision";
+    const subtitle = "Put your life in the hands of a computer";
+    const options = ["Thing One", "Thing Two", "Thing Four"];
+
     return (
       <div>
-        <Header />
+        {/* The data passed here looks like html attributes, but
+            they are actually key-value pairs. 
+            The key is always a string. The value can be whatever we want. 
+        */}
+        <Header title={title} subtitle={subtitle}/>
         <Action />
-        <Options />
+        <Options options={options} />
         <AddOption />
       </div>
     );
@@ -23,8 +25,8 @@ class Header extends React.Component{
   render() {
     return (
       <div>
-        <h1>Indecision</h1>
-        <h2>Put your life in the hands of a computer</h2>
+        <h1>{this.props.title}</h1>
+        <h2>{this.props.subtitle}</h2>
       </div>
     );
   }
@@ -40,25 +42,34 @@ class Action extends React.Component {
   }
 }
 
+// Andrew's challenge for Section 4, Lecture 28. #1
+// Set up an options prop for the Options component.
+// We are using the Options array defined above.
+// Render the lenght of the array.
+
+// Challenge #2
+// Render new p tag for each option (set text, set key)
 class Options extends React.Component {
   render() {
     return (
       <div>
-        Options Component Here.
-        <Option />
+        {
+          // What I typed for challenge #2 below
+          // this.props.options.map((option) => <p key={option}>{option}</p>)
+          
+          // rendering it with Option class below
+          this.props.options.map((option) => <Option key={option} optionText={option} />)
+        }
       </div>
     );
   }
 }
 
-// Andrew's challenge for Section 4, Lecture 27
-// Create an Option React class and render it inside Options above.
-// Option -> Static text: Option Component here.
 class Option extends React.Component {
   render() {
     return (
       <div>
-        Option Component Here
+        Option: {this.props.optionText}
       </div>
     );
   }

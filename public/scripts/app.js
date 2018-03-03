@@ -8,14 +8,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-// React components are just ES6 classes that extend something defined
-// in React.
-// With React components, render() MUST be defined.
-// Also, React components MUST be named with an uppercase first letter
-// (whereas non-React ES6 classes can be named ith a lowercase first letter).
-// The uppercase letter tells React it's a class and not an html element.
-
-// This class has other classes nested inside it.
+// Section 4, Lecture 28 - Component Props
+// Props allows data to be transfered from one React component to another
 var IndecsionApp = function (_React$Component) {
   _inherits(IndecsionApp, _React$Component);
 
@@ -28,12 +22,16 @@ var IndecsionApp = function (_React$Component) {
   _createClass(IndecsionApp, [{
     key: "render",
     value: function render() {
+      var title = "Indecision";
+      var subtitle = "Put your life in the hands of a computer";
+      var options = ["Thing One", "Thing Two", "Thing Four"];
+
       return React.createElement(
         "div",
         null,
-        React.createElement(Header, null),
+        React.createElement(Header, { title: title, subtitle: subtitle }),
         React.createElement(Action, null),
-        React.createElement(Options, null),
+        React.createElement(Options, { options: options }),
         React.createElement(AddOption, null)
       );
     }
@@ -60,12 +58,12 @@ var Header = function (_React$Component2) {
         React.createElement(
           "h1",
           null,
-          "Indecision"
+          this.props.title
         ),
         React.createElement(
           "h2",
           null,
-          "Put your life in the hands of a computer"
+          this.props.subtitle
         )
       );
     }
@@ -101,6 +99,15 @@ var Action = function (_React$Component3) {
   return Action;
 }(React.Component);
 
+// Andrew's challenge for Section 4, Lecture 28. #1
+// Set up an options prop for the Options component.
+// We are using the Options array defined above.
+// Render the lenght of the array.
+
+// Challenge #2
+// Render new p tag for each option (set text, set key)
+
+
 var Options = function (_React$Component4) {
   _inherits(Options, _React$Component4);
 
@@ -116,19 +123,20 @@ var Options = function (_React$Component4) {
       return React.createElement(
         "div",
         null,
-        "Options Component Here.",
-        React.createElement(Option, null)
+
+        // What I typed for challenge #2 below
+        // this.props.options.map((option) => <p key={option}>{option}</p>)
+
+        // rendering it with Option class below
+        this.props.options.map(function (option) {
+          return React.createElement(Option, { key: option, optionText: option });
+        })
       );
     }
   }]);
 
   return Options;
 }(React.Component);
-
-// Andrew's challenge for Section 4, Lecture 27
-// Create an Option React class and render it inside Options above.
-// Option -> Static text: Option Component here.
-
 
 var Option = function (_React$Component5) {
   _inherits(Option, _React$Component5);
@@ -145,7 +153,8 @@ var Option = function (_React$Component5) {
       return React.createElement(
         "div",
         null,
-        "Option Component Here"
+        "Option: ",
+        this.props.optionText
       );
     }
   }]);
