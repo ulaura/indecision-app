@@ -8,7 +8,35 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-// Section 4, Lecture 29 - Events and Methods
+// Section 4, Lecture 30 - Method Binding
+
+// bind() is a way to fix the this-binding that gets lost when methods
+// are called a certain way, such as with onClick / onSubmit event handlers.
+var obj = {
+  name: "Vikram",
+  getName: function getName() {
+    return this.name;
+  }
+};
+
+// Here, there is no error. It's referencing the method in
+// the object obj. 
+// console.log(obj.getName());
+
+// In this context, this is a regular function, NOT an object,
+// so the 'this' loses its binding.
+// const getName = obj.getName;
+// console.log(getName());
+
+// Here, we use bind and pass obj so we can fix the this-binding we lost earlier. 
+// const getName = obj.getName.bind(obj); 
+// console.log(getName());
+
+// We can pass anything in bind()
+var getName = obj.getName.bind({ name: "Laura" });
+console.log(getName());
+
+// ***********************************************************
 
 var IndecsionApp = function (_React$Component) {
   _inherits(IndecsionApp, _React$Component);
@@ -83,8 +111,6 @@ var Action = function (_React$Component3) {
 
   _createClass(Action, [{
     key: "handlePick",
-
-    // creating a method that's contained within this React class
     value: function handlePick() {
       alert("handlePick");
     }
@@ -106,25 +132,31 @@ var Action = function (_React$Component3) {
   return Action;
 }(React.Component);
 
-// Andrew's challenge #1 for Section 4, Lecture 29
-// Set up a Remove All button
-// Set up a method handleRemoveAll -> Alert some message
-// Set up onClick to fire the method
-
-
 var Options = function (_React$Component4) {
   _inherits(Options, _React$Component4);
 
-  function Options() {
+  // We are overriding React's constructor method with our custom one
+  // for Options. 
+  // We call it with props because React calls its constructor with props
+  function Options(props) {
     _classCallCheck(this, Options);
 
-    return _possibleConstructorReturn(this, (Options.__proto__ || Object.getPrototypeOf(Options)).apply(this, arguments));
+    // we bind 'this' here so we don't have to bind it every time we use
+    // this.handleRemoveAll within Options
+    var _this4 = _possibleConstructorReturn(this, (Options.__proto__ || Object.getPrototypeOf(Options)).call(this, props));
+    // Remember we call super() to pull down all the functionality
+    // of React's constructor method.
+
+
+    _this4.handleRemoveAll = _this4.handleRemoveAll.bind(_this4);
+    return _this4;
   }
 
   _createClass(Options, [{
     key: "handleRemoveAll",
     value: function handleRemoveAll() {
-      alert("Remove all the options!");
+      console.log(this.props.options);
+      // alert("Remove all the options!");
     }
   }, {
     key: "render",
@@ -170,13 +202,6 @@ var Option = function (_React$Component5) {
 
   return Option;
 }(React.Component);
-
-// Challenge #2
-// 1. Set up the form with text input and submit button
-// 2. Wire up onSubmit
-// 3. handleAddOption -> fetch the value typed -> 
-//    if value, then alert; if no value, do nothing
-
 
 var AddOption = function (_React$Component6) {
   _inherits(AddOption, _React$Component6);

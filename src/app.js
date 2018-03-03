@@ -1,5 +1,33 @@
-// Section 4, Lecture 29 - Events and Methods
+// Section 4, Lecture 30 - Method Binding
 
+// bind() is a way to fix the this-binding that gets lost when methods
+// are called a certain way, such as with onClick / onSubmit event handlers.
+const obj = {
+  name: "Vikram",
+  getName() {
+    return this.name;
+  }
+};
+
+// Here, there is no error. It's referencing the method in
+// the object obj. 
+// console.log(obj.getName());
+
+// In this context, this is a regular function, NOT an object,
+// so the 'this' loses its binding.
+// const getName = obj.getName;
+// console.log(getName());
+
+// Here, we use bind and pass obj so we can fix the this-binding we lost earlier. 
+// const getName = obj.getName.bind(obj); 
+// console.log(getName());
+
+// We can pass anything in bind()
+const getName = obj.getName.bind({name: "Laura"});
+console.log(getName());
+
+
+// ***********************************************************
 class IndecsionApp extends React.Component {
   render() {
     const title = "Indecision";
@@ -29,7 +57,6 @@ class Header extends React.Component{
 }
 
 class Action extends React.Component {
-  // creating a method that's contained within this React class
   handlePick() {
     alert("handlePick");
   }
@@ -43,13 +70,22 @@ class Action extends React.Component {
   }
 }
 
-// Andrew's challenge #1 for Section 4, Lecture 29
-// Set up a Remove All button
-// Set up a method handleRemoveAll -> Alert some message
-// Set up onClick to fire the method
 class Options extends React.Component {
+  // We are overriding React's constructor method with our custom one
+  // for Options. 
+  // We call it with props because React calls its constructor with props
+  constructor(props) {
+    // Remember we call super() to pull down all the functionality
+    // of React's constructor method.
+    super(props);
+    // we bind 'this' here so we don't have to bind it every time we use
+    // this.handleRemoveAll within Options
+    this.handleRemoveAll = this.handleRemoveAll.bind(this);
+  }
+
   handleRemoveAll() {
-    alert("Remove all the options!");
+    console.log(this.props.options)
+    // alert("Remove all the options!");
   }
 
   render() {
@@ -74,11 +110,6 @@ class Option extends React.Component {
   }
 }
 
-// Challenge #2
-// 1. Set up the form with text input and submit button
-// 2. Wire up onSubmit
-// 3. handleAddOption -> fetch the value typed -> 
-//    if value, then alert; if no value, do nothing
 class AddOption extends React.Component {
   // The method for the form. Remember it has to take in an argument
   // so we can use the event so we know what was passed in with the form.
