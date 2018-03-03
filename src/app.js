@@ -1,5 +1,5 @@
-// Section 4, Lecture 28 - Component Props
-// Props allows data to be transfered from one React component to another
+// Section 4, Lecture 29 - Events and Methods
+
 class IndecsionApp extends React.Component {
   render() {
     const title = "Indecision";
@@ -8,10 +8,6 @@ class IndecsionApp extends React.Component {
 
     return (
       <div>
-        {/* The data passed here looks like html attributes, but
-            they are actually key-value pairs. 
-            The key is always a string. The value can be whatever we want. 
-        */}
         <Header title={title} subtitle={subtitle}/>
         <Action />
         <Options options={options} />
@@ -33,33 +29,36 @@ class Header extends React.Component{
 }
 
 class Action extends React.Component {
+  // creating a method that's contained within this React class
+  handlePick() {
+    alert("handlePick");
+  }
+
   render() {
     return (
       <div>
-        <button>What should I do?</button>
+        <button onClick={this.handlePick}>What should I do?</button>
       </div>
     );
   }
 }
 
-// Andrew's challenge for Section 4, Lecture 28. #1
-// Set up an options prop for the Options component.
-// We are using the Options array defined above.
-// Render the lenght of the array.
-
-// Challenge #2
-// Render new p tag for each option (set text, set key)
+// Andrew's challenge #1 for Section 4, Lecture 29
+// Set up a Remove All button
+// Set up a method handleRemoveAll -> Alert some message
+// Set up onClick to fire the method
 class Options extends React.Component {
+  handleRemoveAll() {
+    alert("Remove all the options!");
+  }
+
   render() {
     return (
       <div>
         {
-          // What I typed for challenge #2 below
-          // this.props.options.map((option) => <p key={option}>{option}</p>)
-          
-          // rendering it with Option class below
           this.props.options.map((option) => <Option key={option} optionText={option} />)
         }
+        <button onClick={this.handleRemoveAll}>Remove All</button>
       </div>
     );
   }
@@ -75,11 +74,37 @@ class Option extends React.Component {
   }
 }
 
+// Challenge #2
+// 1. Set up the form with text input and submit button
+// 2. Wire up onSubmit
+// 3. handleAddOption -> fetch the value typed -> 
+//    if value, then alert; if no value, do nothing
 class AddOption extends React.Component {
+  // The method for the form. Remember it has to take in an argument
+  // so we can use the event so we know what was passed in with the form.
+  handleAddOption(e) {
+    e.preventDefault();
+
+    // .trim() removes leading and trailing spaces
+    let theOption = e.target.elements.theOption.value.trim();
+
+    if (theOption) {
+      alert(theOption);
+      e.target.elements.theOption.value = "";
+    }
+    
+  }
+
   render() {
-    return <p>AddOption component here.</p>;
+    return (
+      <div>
+        <form onSubmit={this.handleAddOption}>
+          <input type="text" name="theOption"/>
+          <button>Add Option</button>
+        </form>
+      </div>
+    );
   }
 }
 
-// You can render React classes directly in ReactDOM.render()
 ReactDOM.render(<IndecsionApp />, document.getElementById("app"));

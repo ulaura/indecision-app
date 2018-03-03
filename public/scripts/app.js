@@ -8,8 +8,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-// Section 4, Lecture 28 - Component Props
-// Props allows data to be transfered from one React component to another
+// Section 4, Lecture 29 - Events and Methods
+
 var IndecsionApp = function (_React$Component) {
   _inherits(IndecsionApp, _React$Component);
 
@@ -82,6 +82,13 @@ var Action = function (_React$Component3) {
   }
 
   _createClass(Action, [{
+    key: "handlePick",
+
+    // creating a method that's contained within this React class
+    value: function handlePick() {
+      alert("handlePick");
+    }
+  }, {
     key: "render",
     value: function render() {
       return React.createElement(
@@ -89,7 +96,7 @@ var Action = function (_React$Component3) {
         null,
         React.createElement(
           "button",
-          null,
+          { onClick: this.handlePick },
           "What should I do?"
         )
       );
@@ -99,13 +106,10 @@ var Action = function (_React$Component3) {
   return Action;
 }(React.Component);
 
-// Andrew's challenge for Section 4, Lecture 28. #1
-// Set up an options prop for the Options component.
-// We are using the Options array defined above.
-// Render the lenght of the array.
-
-// Challenge #2
-// Render new p tag for each option (set text, set key)
+// Andrew's challenge #1 for Section 4, Lecture 29
+// Set up a Remove All button
+// Set up a method handleRemoveAll -> Alert some message
+// Set up onClick to fire the method
 
 
 var Options = function (_React$Component4) {
@@ -118,19 +122,24 @@ var Options = function (_React$Component4) {
   }
 
   _createClass(Options, [{
+    key: "handleRemoveAll",
+    value: function handleRemoveAll() {
+      alert("Remove all the options!");
+    }
+  }, {
     key: "render",
     value: function render() {
       return React.createElement(
         "div",
         null,
-
-        // What I typed for challenge #2 below
-        // this.props.options.map((option) => <p key={option}>{option}</p>)
-
-        // rendering it with Option class below
         this.props.options.map(function (option) {
           return React.createElement(Option, { key: option, optionText: option });
-        })
+        }),
+        React.createElement(
+          "button",
+          { onClick: this.handleRemoveAll },
+          "Remove All"
+        )
       );
     }
   }]);
@@ -162,6 +171,13 @@ var Option = function (_React$Component5) {
   return Option;
 }(React.Component);
 
+// Challenge #2
+// 1. Set up the form with text input and submit button
+// 2. Wire up onSubmit
+// 3. handleAddOption -> fetch the value typed -> 
+//    if value, then alert; if no value, do nothing
+
+
 var AddOption = function (_React$Component6) {
   _inherits(AddOption, _React$Component6);
 
@@ -172,20 +188,42 @@ var AddOption = function (_React$Component6) {
   }
 
   _createClass(AddOption, [{
+    key: "handleAddOption",
+
+    // The method for the form. Remember it has to take in an argument
+    // so we can use the event so we know what was passed in with the form.
+    value: function handleAddOption(e) {
+      e.preventDefault();
+
+      // .trim() removes leading and trailing spaces
+      var theOption = e.target.elements.theOption.value.trim();
+
+      if (theOption) {
+        alert(theOption);
+        e.target.elements.theOption.value = "";
+      }
+    }
+  }, {
     key: "render",
     value: function render() {
       return React.createElement(
-        "p",
+        "div",
         null,
-        "AddOption component here."
+        React.createElement(
+          "form",
+          { onSubmit: this.handleAddOption },
+          React.createElement("input", { type: "text", name: "theOption" }),
+          React.createElement(
+            "button",
+            null,
+            "Add Option"
+          )
+        )
       );
     }
   }]);
 
   return AddOption;
 }(React.Component);
-
-// You can render React classes directly in ReactDOM.render()
-
 
 ReactDOM.render(React.createElement(IndecsionApp, null), document.getElementById("app"));
