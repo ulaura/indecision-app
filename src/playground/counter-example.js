@@ -1,5 +1,3 @@
-// Section 4, Lecture 34 - Alternative setState Syntax
-
 class Counter extends React.Component {
   constructor(props) {
     super(props);
@@ -45,33 +43,6 @@ class Counter extends React.Component {
         count: 0
       };
     });
-    this.setState((prevState) => {
-      return {
-        count: prevState.count + 1
-      };
-    });
-
-    // setState() is asynchronous.
-    // React batches all setState() functions and calculates what needs
-    // to be updated on the DOM.
-    // With this syntax below, the count reset button won't work as expected
-    // What we want: return to 0 and then add one.
-    // What happens instead: React grabs whatever the previous state was
-    // and adds one to it. 
-    // Solution: Use an updater function with setState() like above.
-
-    // this.setState({
-    //   count: 0
-    // });
-    // this.setState({
-    //   count: this.state.count + 1
-    // });
-
-    // If you don't need to access the previous state's data, passing
-    // an object through setState() is fine (eg: this.setState({count: 0});). 
-    // However, that syntax is probably going to get depreciated, 
-    // so it's best to pass in an updater function instead
-    // (eg: this.setState(() => {return {count: 0};});
   }
 
   render(){

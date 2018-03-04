@@ -8,90 +8,38 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-// Section 4, Lecture 34 - Alternative setState Syntax
+// Section 4, Lecture 35 - Build It: Adding State to VisibilityToggle
 
-var Counter = function (_React$Component) {
-  _inherits(Counter, _React$Component);
+// Create a component VisibilityToggle
+// Three methods: render, constructor, handleToggleVisibility onClick
+// state: visibility. default -> false
+// At false: button text says "show details"
+// At true: button text says "hide details" and the details text is shown.
 
-  function Counter(props) {
-    _classCallCheck(this, Counter);
+var VisibilityToggle = function (_React$Component) {
+  _inherits(VisibilityToggle, _React$Component);
 
-    var _this = _possibleConstructorReturn(this, (Counter.__proto__ || Object.getPrototypeOf(Counter)).call(this, props));
+  function VisibilityToggle(props) {
+    _classCallCheck(this, VisibilityToggle);
 
-    _this.handleAddOne = _this.handleAddOne.bind(_this);
-    _this.handleMinusOne = _this.handleMinusOne.bind(_this);
-    _this.handleReset = _this.handleReset.bind(_this);
+    var _this = _possibleConstructorReturn(this, (VisibilityToggle.__proto__ || Object.getPrototypeOf(VisibilityToggle)).call(this, props));
 
-    // setting the default state
+    _this.handleToggleVisibility = _this.handleToggleVisibility.bind(_this);
+
     _this.state = {
-      count: 0
+      visibility: false
     };
     return _this;
   }
 
-  _createClass(Counter, [{
-    key: "handleAddOne",
-    value: function handleAddOne() {
-      // // this adds one to count, but it does not update the state.
-      // this.state.count++;
-      // console.log(this.state);
-
-      // To update the state, this.setState() has to be called
-      // and then the specific previous state value that needs to change 
-      // has to be passed as an argument to be manipulated
+  _createClass(VisibilityToggle, [{
+    key: "handleToggleVisibility",
+    value: function handleToggleVisibility() {
       this.setState(function (prevState) {
         return {
-          count: prevState.count + 1
+          visibility: !prevState.visibility
         };
       });
-    }
-  }, {
-    key: "handleMinusOne",
-    value: function handleMinusOne() {
-      this.setState(function (prevState) {
-        return {
-          count: prevState.count - 1
-        };
-      });
-    }
-  }, {
-    key: "handleReset",
-    value: function handleReset() {
-      // Because handleReset brings the count to 0 no matter what,
-      // we don't care about the previous state, so we don't have
-      // to pass any arguments in this.setState()
-      this.setState(function () {
-        return {
-          count: 0
-        };
-      });
-      this.setState(function (prevState) {
-        return {
-          count: prevState.count + 1
-        };
-      });
-
-      // setState() is asynchronous.
-      // React batches all setState() functions and calculates what needs
-      // to be updated on the DOM.
-      // With this syntax below, the count reset button won't work as expected
-      // What we want: return to 0 and then add one.
-      // What happens instead: React grabs whatever the previous state was
-      // and adds one to it. 
-      // Solution: Use an updater function with setState() like above.
-
-      // this.setState({
-      //   count: 0
-      // });
-      // this.setState({
-      //   count: this.state.count + 1
-      // });
-
-      // If you don't need to access the previous state's data, passing
-      // an object through setState() is fine (eg: this.setState({count: 0});). 
-      // However, that syntax is probably going to get depreciated, 
-      // so it's best to pass in an updater function instead
-      // (eg: this.setState(() => {return {count: 0};});
     }
   }, {
     key: "render",
@@ -102,66 +50,67 @@ var Counter = function (_React$Component) {
         React.createElement(
           "h1",
           null,
-          "Count: ",
-          this.state.count
+          "Visibility Toggle"
         ),
         React.createElement(
           "button",
-          { onClick: this.handleAddOne },
-          "+1"
+          { onClick: this.handleToggleVisibility },
+          this.state.visibility ? "Hide Details" : "Show Details"
         ),
-        React.createElement(
-          "button",
-          { onClick: this.handleMinusOne },
-          "-1"
-        ),
-        React.createElement(
-          "button",
-          { onClick: this.handleReset },
-          "RESET"
+        this.state.visibility && React.createElement(
+          "div",
+          null,
+          React.createElement(
+            "p",
+            null,
+            "Here are some details!!"
+          )
         )
       );
     }
   }]);
 
-  return Counter;
+  return VisibilityToggle;
 }(React.Component);
 
-ReactDOM.render(React.createElement(Counter, null), document.getElementById("app"));
+ReactDOM.render(React.createElement(VisibilityToggle, null), document.getElementById("app"));
 
-// // Code from Section 3, Lecture 17
-// let count = 0;
+// // Previous code from Build It! Challenge - End of Section 3
 
-// // for the onClick functions in templateTwo
-// const addOne = () => {
-//   count++;
-//   renderCounterApp();
+// const app = {
+//   buttonSwitch: ["Show Details", "Hide Details"]
+// }
+
+// let theButton = app.buttonSwitch[0];
+
+// const changeThis = () => {
+//   if (theButton === app.buttonSwitch[0]) {
+//     theButton = app.buttonSwitch[1];
+//     render();
+//   }
+//   else {
+//     theButton = app.buttonSwitch[0];
+//     render();
+//   }
+//   console.log(`You clicked ${theButton}`);
 // };
 
-// const minusOne = () => {
-//   // subtract 1 from count and rerender
-//   count--;
-//   renderCounterApp();
-// };
 
-// const reset = () => {
-//   // reset the count and rerender
-//   count = 0;
-//   renderCounterApp();
-// };
+// const appRoot = document.getElementById("app");
 
-
-// const renderCounterApp = () => {
-//   const templateTwo = (
+// const render = () => {
+//   const template = (
 //     <div>
-//       <h1>Count: {count}</h1>
-//       <button onClick={addOne}>+1</button>
-//       <button onClick={minusOne}>-1</button>
-//       <button onClick={reset}>RESET</button> 
+//       <h1>Visibility Toggle</h1>
+
+//       <button onClick={changeThis}>
+//         {theButton}
+//       </button>
+//       {(theButton === app.buttonSwitch[0]) ?
+//           null : <p>Here are some details!</p> }
 //     </div>
-//   );
+//   );  
+//   ReactDOM.render(template, appRoot);
+// }
 
-//   ReactDOM.render(templateTwo, appRoot);
-// };
-
-// renderCounterApp();
+// render();
