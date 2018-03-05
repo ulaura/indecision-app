@@ -1,25 +1,49 @@
-// From Section 4, Lecture 31 - What is Component State?
-
-// Component state allows our components to manage data.
-// Once the data changes, the component will automatically rerender
-// to reflect those changes.
-// Compare it to jsx-indecision.js where render() had to be manually
-// called when a function was called and changed some data in our app.
-
-// Not much change in code this time.
-// Next lecture, #32, we're working on counter-example.js
+// Section 4, Lecture 36 - Indecision State: Part I
 
 class IndecsionApp extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleDeleteOptions = this.handleDeleteOptions.bind(this);
+    this.state = {
+      options: ["Thing One", "Thing Two", "Thing Three"]
+    };
+  }
+
+  // props can send data from parent class to child class, but not
+  // the other way around. 
+  // Passing methods as props for children to use allows them to 
+  // send data back up to the parent via props.
+
+  // handleDeleteOptions lives in IndecisionApp,
+  // but will be passed to and called by Options.
+  handleDeleteOptions() {
+    this.setState(() => {
+      return {
+        options: []
+      };
+    });
+  }
+
+  // Challenge for Section 4, Lecture 36
+  // Create new method handlePick - pass method down to Action 
+  // and set up onClick - bind here.
+  // handlePick will randomly pick and option and alert it.
+  // The logic already exists below.
+  // Also, delete the previous handlePick method in Action
+
   render() {
     const title = "Indecision";
     const subtitle = "Put your life in the hands of a computer";
-    const options = ["Thing One", "Thing Two", "Thing Four"];
 
     return (
       <div>
         <Header title={title} subtitle={subtitle}/>
-        <Action />
-        <Options options={options} />
+        {/* will only render if there are options in the array */}
+        <Action hasOptions={this.state.options.length > 0}/>
+        <Options 
+          options={this.state.options} 
+          handleDeleteOptions={this.handleDeleteOptions}
+        />
         <AddOption />
       </div>
     );
@@ -45,37 +69,28 @@ class Action extends React.Component {
   render() {
     return (
       <div>
-        <button onClick={this.handlePick}>What should I do?</button>
+        <button 
+          onClick={this.handlePick}
+          /* If this.props.hasOptions is false, there are no
+              options in this.state.options and this button should
+              be disabled */
+          disabled={!this.props.hasOptions}
+        >
+            What should I do?
+        </button>
       </div>
     );
   }
 }
 
 class Options extends React.Component {
-  // We are overriding React's constructor method with our custom one
-  // for Options. 
-  // We call it with props because React calls its constructor with props
-  constructor(props) {
-    // Remember we call super() to pull down all the functionality
-    // of React's constructor method.
-    super(props);
-    // we bind 'this' here so we don't have to bind it every time we use
-    // this.handleRemoveAll within Options
-    this.handleRemoveAll = this.handleRemoveAll.bind(this);
-  }
-
-  handleRemoveAll() {
-    console.log(this.props.options)
-    // alert("Remove all the options!");
-  }
-
   render() {
     return (
       <div>
         {
           this.props.options.map((option) => <Option key={option} optionText={option} />)
         }
-        <button onClick={this.handleRemoveAll}>Remove All</button>
+        <button onClick={this.props.handleDeleteOptions}>Remove All</button>
       </div>
     );
   }
