@@ -19,6 +19,7 @@ var IndecsionApp = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (IndecsionApp.__proto__ || Object.getPrototypeOf(IndecsionApp)).call(this, props));
 
     _this.handleDeleteOptions = _this.handleDeleteOptions.bind(_this);
+    _this.handlePick = _this.handlePick.bind(_this);
     _this.state = {
       options: ["Thing One", "Thing Two", "Thing Three"]
     };
@@ -48,9 +49,19 @@ var IndecsionApp = function (_React$Component) {
     // Create new method handlePick - pass method down to Action 
     // and set up onClick - bind here.
     // handlePick will randomly pick and option and alert it.
-    // The logic already exists below.
+    // The logic already exists in jsx-indecision.js
     // Also, delete the previous handlePick method in Action
 
+  }, {
+    key: "handlePick",
+    value: function handlePick() {
+      var randomNumber = Math.floor(Math.random() * this.state.options.length);
+      var decision = this.state.options[randomNumber];
+
+      // We are not changing the state,
+      // so we don't need to use setState() here.
+      return alert(decision);
+    }
   }, {
     key: "render",
     value: function render() {
@@ -61,7 +72,10 @@ var IndecsionApp = function (_React$Component) {
         "div",
         null,
         React.createElement(Header, { title: title, subtitle: subtitle }),
-        React.createElement(Action, { hasOptions: this.state.options.length > 0 }),
+        React.createElement(Action, {
+          hasOptions: this.state.options.length > 0,
+          handlePick: this.handlePick
+        }),
         React.createElement(Options, {
           options: this.state.options,
           handleDeleteOptions: this.handleDeleteOptions
@@ -116,11 +130,6 @@ var Action = function (_React$Component3) {
   }
 
   _createClass(Action, [{
-    key: "handlePick",
-    value: function handlePick() {
-      alert("handlePick");
-    }
-  }, {
     key: "render",
     value: function render() {
       return React.createElement(
@@ -129,7 +138,8 @@ var Action = function (_React$Component3) {
         React.createElement(
           "button",
           {
-            onClick: this.handlePick
+            /* Passing IndecisionApp's method handlePick as a prop in onClick */
+            onClick: this.props.handlePick
             /* If this.props.hasOptions is false, there are no
                 options in this.state.options and this button should
                 be disabled */

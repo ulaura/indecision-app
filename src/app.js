@@ -4,6 +4,7 @@ class IndecsionApp extends React.Component {
   constructor(props) {
     super(props);
     this.handleDeleteOptions = this.handleDeleteOptions.bind(this);
+    this.handlePick = this.handlePick.bind(this);
     this.state = {
       options: ["Thing One", "Thing Two", "Thing Three"]
     };
@@ -28,8 +29,17 @@ class IndecsionApp extends React.Component {
   // Create new method handlePick - pass method down to Action 
   // and set up onClick - bind here.
   // handlePick will randomly pick and option and alert it.
-  // The logic already exists below.
+  // The logic already exists in jsx-indecision.js
   // Also, delete the previous handlePick method in Action
+
+  handlePick() {
+    const randomNumber = Math.floor(Math.random() * this.state.options.length);
+    const decision = this.state.options[randomNumber];
+    
+    // We are not changing the state,
+    // so we don't need to use setState() here.
+    return alert(decision);
+  }
 
   render() {
     const title = "Indecision";
@@ -39,7 +49,10 @@ class IndecsionApp extends React.Component {
       <div>
         <Header title={title} subtitle={subtitle}/>
         {/* will only render if there are options in the array */}
-        <Action hasOptions={this.state.options.length > 0}/>
+        <Action 
+          hasOptions={this.state.options.length > 0}
+          handlePick={this.handlePick}
+        />
         <Options 
           options={this.state.options} 
           handleDeleteOptions={this.handleDeleteOptions}
@@ -62,15 +75,12 @@ class Header extends React.Component{
 }
 
 class Action extends React.Component {
-  handlePick() {
-    alert("handlePick");
-  }
-
   render() {
     return (
       <div>
         <button 
-          onClick={this.handlePick}
+          /* Passing IndecisionApp's method handlePick as a prop in onClick */
+          onClick={this.props.handlePick}
           /* If this.props.hasOptions is false, there are no
               options in this.state.options and this button should
               be disabled */
