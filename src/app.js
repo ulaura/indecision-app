@@ -1,6 +1,19 @@
-// Section 4, Lecture 37 - Indecision State: Part II
+// Section 5, Lecture 40 - The Stateless Functional Component
 
-class IndecsionApp extends React.Component {
+// These components are just as written:
+// they don't have a state, they are written as a function,
+// and they are components.
+// These components only affect the presentation of the app and
+// don't manage state data. 
+// They only have a render(){return)} function when written as
+// a class component.
+// See below for User class example.
+
+// Challenge for Section 5, Lecture 40
+// Convert Header, Options, and Option into 
+// functional stateless components
+
+class IndecisionApp extends React.Component {
   constructor(props) {
     super(props);
     this.handleDeleteOptions = this.handleDeleteOptions.bind(this);
@@ -83,58 +96,103 @@ class IndecsionApp extends React.Component {
   }
 }
 
-class Header extends React.Component{
-  render() {
-    return (
-      <div>
-        <h1>{this.props.title}</h1>
-        <h2>{this.props.subtitle}</h2>
-      </div>
-    );
-  }
-}
+const Header = (props) => {
+  return (
+    <div>
+      <h1>{props.title}</h1>
+      <h2>{props.subtitle}</h2>
+    </div>
+  );
+};
 
-class Action extends React.Component {
-  render() {
-    return (
-      <div>
-        <button 
-          /* Passing IndecisionApp's method handlePick as a prop in onClick */
-          onClick={this.props.handlePick}
-          /* If this.props.hasOptions is false, there are no
-              options in this.state.options and this button should
-              be disabled */
-          disabled={!this.props.hasOptions}
-        >
-            What should I do?
-        </button>
-      </div>
-    );
-  }
-}
+// class Header extends React.Component{
+//   render() {
+//     return (
+//       <div>
+//         <h1>{this.props.title}</h1>
+//         <h2>{this.props.subtitle}</h2>
+//       </div>
+//     );
+//   }
+// }
 
-class Options extends React.Component {
-  render() {
-    return (
-      <div>
-        <button onClick={this.props.handleDeleteOptions}>Remove All</button>
-        {
-          this.props.options.map((option) => <Option key={option} optionText={option} />)
-        }
-      </div>
-    );
-  }
-}
+const Action = (props) => {
+  return (
+    <div>
+      <button 
+        /* Passing IndecisionApp's method handlePick as a prop in onClick */
+        onClick={props.handlePick}
+        /* If this.props.hasOptions is false, there are no
+            options in this.state.options and this button should
+            be disabled */
+        disabled={!props.hasOptions}
+      >
+          What should I do?
+      </button>
+    </div>
+  );
+};
 
-class Option extends React.Component {
-  render() {
-    return (
-      <div>
-        Option: {this.props.optionText}
-      </div>
-    );
-  }
-}
+// class Action extends React.Component {
+//   render() {
+//     return (
+//       <div>
+//         <button 
+//           /* Passing IndecisionApp's method handlePick as a prop in onClick */
+//           onClick={this.props.handlePick}
+//           /* If this.props.hasOptions is false, there are no
+//               options in this.state.options and this button should
+//               be disabled */
+//           disabled={!this.props.hasOptions}
+//         >
+//             What should I do?
+//         </button>
+//       </div>
+//     );
+//   }
+// }
+
+const Options = (props) => {
+  return (
+    <div>
+      <button onClick={props.handleDeleteOptions}>Remove All</button>
+      {
+        props.options.map((option) => <Option key={option} optionText={option} />)
+      }
+    </div>
+  );
+};
+
+// class Options extends React.Component {
+//   render() {
+//     return (
+//       <div>
+//         <button onClick={this.props.handleDeleteOptions}>Remove All</button>
+//         {
+//           this.props.options.map((option) => <Option key={option} optionText={option} />)
+//         }
+//       </div>
+//     );
+//   }
+// }
+
+const Option = (props) => {
+  return (
+    <div>
+      Option: {props.optionText}
+    </div>
+  );
+};
+
+// class Option extends React.Component {
+//   render() {
+//     return (
+//       <div>
+//         Option: {this.props.optionText}
+//       </div>
+//     );
+//   }
+// }
 
 class AddOption extends React.Component {
   // The method for the form. Remember it has to take in an argument
@@ -185,4 +243,21 @@ class AddOption extends React.Component {
   }
 }
 
-ReactDOM.render(<IndecsionApp />, document.getElementById("app"));
+// stateless functional components follow the same naming convenction
+// for React components. First letter gets capitalized.
+// The function acts like a render() function, so we skip render()
+// and just return the jsx. 
+
+// Functional stateless components don't allow for 'this' because
+// there is no state, so props gets passed
+// directly as an argument in the function.
+const User = (props) => {
+  return (
+    <div>
+      <p>Name: {props.name}</p>
+      <p>Age: </p>
+    </div>
+  );
+};
+
+ReactDOM.render(<IndecisionApp />, document.getElementById("app"));

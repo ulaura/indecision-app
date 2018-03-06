@@ -8,15 +8,28 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-// Section 4, Lecture 37 - Indecision State: Part II
+// Section 5, Lecture 40 - The Stateless Functional Component
 
-var IndecsionApp = function (_React$Component) {
-  _inherits(IndecsionApp, _React$Component);
+// These components are just as written:
+// they don't have a state, they are written as a function,
+// and they are components.
+// These components only affect the presentation of the app and
+// don't manage state data. 
+// They only have a render(){return)} function when written as
+// a class component.
+// See below for User class example.
 
-  function IndecsionApp(props) {
-    _classCallCheck(this, IndecsionApp);
+// Challenge for Section 5, Lecture 40
+// Convert Header, Options, and Option into 
+// functional stateless components
 
-    var _this = _possibleConstructorReturn(this, (IndecsionApp.__proto__ || Object.getPrototypeOf(IndecsionApp)).call(this, props));
+var IndecisionApp = function (_React$Component) {
+  _inherits(IndecisionApp, _React$Component);
+
+  function IndecisionApp(props) {
+    _classCallCheck(this, IndecisionApp);
+
+    var _this = _possibleConstructorReturn(this, (IndecisionApp.__proto__ || Object.getPrototypeOf(IndecisionApp)).call(this, props));
 
     _this.handleDeleteOptions = _this.handleDeleteOptions.bind(_this);
     _this.handlePick = _this.handlePick.bind(_this);
@@ -36,7 +49,7 @@ var IndecsionApp = function (_React$Component) {
   // but will be passed to and called by Options.
 
 
-  _createClass(IndecsionApp, [{
+  _createClass(IndecisionApp, [{
     key: "handleDeleteOptions",
     value: function handleDeleteOptions() {
       this.setState(function () {
@@ -108,131 +121,124 @@ var IndecsionApp = function (_React$Component) {
     }
   }]);
 
-  return IndecsionApp;
+  return IndecisionApp;
 }(React.Component);
 
-var Header = function (_React$Component2) {
-  _inherits(Header, _React$Component2);
+var Header = function Header(props) {
+  return React.createElement(
+    "div",
+    null,
+    React.createElement(
+      "h1",
+      null,
+      props.title
+    ),
+    React.createElement(
+      "h2",
+      null,
+      props.subtitle
+    )
+  );
+};
 
-  function Header() {
-    _classCallCheck(this, Header);
+// class Header extends React.Component{
+//   render() {
+//     return (
+//       <div>
+//         <h1>{this.props.title}</h1>
+//         <h2>{this.props.subtitle}</h2>
+//       </div>
+//     );
+//   }
+// }
 
-    return _possibleConstructorReturn(this, (Header.__proto__ || Object.getPrototypeOf(Header)).apply(this, arguments));
-  }
+var Action = function Action(props) {
+  return React.createElement(
+    "div",
+    null,
+    React.createElement(
+      "button",
+      {
+        /* Passing IndecisionApp's method handlePick as a prop in onClick */
+        onClick: props.handlePick
+        /* If this.props.hasOptions is false, there are no
+            options in this.state.options and this button should
+            be disabled */
+        , disabled: !props.hasOptions
+      },
+      "What should I do?"
+    )
+  );
+};
 
-  _createClass(Header, [{
-    key: "render",
-    value: function render() {
-      return React.createElement(
-        "div",
-        null,
-        React.createElement(
-          "h1",
-          null,
-          this.props.title
-        ),
-        React.createElement(
-          "h2",
-          null,
-          this.props.subtitle
-        )
-      );
-    }
-  }]);
+// class Action extends React.Component {
+//   render() {
+//     return (
+//       <div>
+//         <button 
+//           /* Passing IndecisionApp's method handlePick as a prop in onClick */
+//           onClick={this.props.handlePick}
+//           /* If this.props.hasOptions is false, there are no
+//               options in this.state.options and this button should
+//               be disabled */
+//           disabled={!this.props.hasOptions}
+//         >
+//             What should I do?
+//         </button>
+//       </div>
+//     );
+//   }
+// }
 
-  return Header;
-}(React.Component);
+var Options = function Options(props) {
+  return React.createElement(
+    "div",
+    null,
+    React.createElement(
+      "button",
+      { onClick: props.handleDeleteOptions },
+      "Remove All"
+    ),
+    props.options.map(function (option) {
+      return React.createElement(Option, { key: option, optionText: option });
+    })
+  );
+};
 
-var Action = function (_React$Component3) {
-  _inherits(Action, _React$Component3);
+// class Options extends React.Component {
+//   render() {
+//     return (
+//       <div>
+//         <button onClick={this.props.handleDeleteOptions}>Remove All</button>
+//         {
+//           this.props.options.map((option) => <Option key={option} optionText={option} />)
+//         }
+//       </div>
+//     );
+//   }
+// }
 
-  function Action() {
-    _classCallCheck(this, Action);
+var Option = function Option(props) {
+  return React.createElement(
+    "div",
+    null,
+    "Option: ",
+    props.optionText
+  );
+};
 
-    return _possibleConstructorReturn(this, (Action.__proto__ || Object.getPrototypeOf(Action)).apply(this, arguments));
-  }
+// class Option extends React.Component {
+//   render() {
+//     return (
+//       <div>
+//         Option: {this.props.optionText}
+//       </div>
+//     );
+//   }
+// }
 
-  _createClass(Action, [{
-    key: "render",
-    value: function render() {
-      return React.createElement(
-        "div",
-        null,
-        React.createElement(
-          "button",
-          {
-            /* Passing IndecisionApp's method handlePick as a prop in onClick */
-            onClick: this.props.handlePick
-            /* If this.props.hasOptions is false, there are no
-                options in this.state.options and this button should
-                be disabled */
-            , disabled: !this.props.hasOptions
-          },
-          "What should I do?"
-        )
-      );
-    }
-  }]);
-
-  return Action;
-}(React.Component);
-
-var Options = function (_React$Component4) {
-  _inherits(Options, _React$Component4);
-
-  function Options() {
-    _classCallCheck(this, Options);
-
-    return _possibleConstructorReturn(this, (Options.__proto__ || Object.getPrototypeOf(Options)).apply(this, arguments));
-  }
-
-  _createClass(Options, [{
-    key: "render",
-    value: function render() {
-      return React.createElement(
-        "div",
-        null,
-        React.createElement(
-          "button",
-          { onClick: this.props.handleDeleteOptions },
-          "Remove All"
-        ),
-        this.props.options.map(function (option) {
-          return React.createElement(Option, { key: option, optionText: option });
-        })
-      );
-    }
-  }]);
-
-  return Options;
-}(React.Component);
-
-var Option = function (_React$Component5) {
-  _inherits(Option, _React$Component5);
-
-  function Option() {
-    _classCallCheck(this, Option);
-
-    return _possibleConstructorReturn(this, (Option.__proto__ || Object.getPrototypeOf(Option)).apply(this, arguments));
-  }
-
-  _createClass(Option, [{
-    key: "render",
-    value: function render() {
-      return React.createElement(
-        "div",
-        null,
-        "Option: ",
-        this.props.optionText
-      );
-    }
-  }]);
-
-  return Option;
-}(React.Component);
-
-var AddOption = function (_React$Component6) {
-  _inherits(AddOption, _React$Component6);
+var AddOption = function (_React$Component2) {
+  _inherits(AddOption, _React$Component2);
 
   // The method for the form. Remember it has to take in an argument
   // so we can use the event so we know what was passed in with the form.
@@ -245,16 +251,16 @@ var AddOption = function (_React$Component6) {
   function AddOption(props) {
     _classCallCheck(this, AddOption);
 
-    var _this6 = _possibleConstructorReturn(this, (AddOption.__proto__ || Object.getPrototypeOf(AddOption)).call(this, props));
+    var _this2 = _possibleConstructorReturn(this, (AddOption.__proto__ || Object.getPrototypeOf(AddOption)).call(this, props));
 
-    _this6.handleAddOption = _this6.handleAddOption.bind(_this6);
+    _this2.handleAddOption = _this2.handleAddOption.bind(_this2);
 
     // we need a state for this individual component
     // to track the error message
-    _this6.state = {
+    _this2.state = {
       error: undefined
     };
-    return _this6;
+    return _this2;
   }
 
   _createClass(AddOption, [{
@@ -301,4 +307,32 @@ var AddOption = function (_React$Component6) {
   return AddOption;
 }(React.Component);
 
-ReactDOM.render(React.createElement(IndecsionApp, null), document.getElementById("app"));
+// stateless functional components follow the same naming convenction
+// for React components. First letter gets capitalized.
+// The function acts like a render() function, so we skip render()
+// and just return the jsx. 
+
+// Functional stateless components don't allow for 'this' because
+// there is no state, so props gets passed
+// directly as an argument in the function.
+
+
+var User = function User(props) {
+  return React.createElement(
+    "div",
+    null,
+    React.createElement(
+      "p",
+      null,
+      "Name: ",
+      props.name
+    ),
+    React.createElement(
+      "p",
+      null,
+      "Age: "
+    )
+  );
+};
+
+ReactDOM.render(React.createElement(IndecisionApp, null), document.getElementById("app"));
