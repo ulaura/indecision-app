@@ -1,12 +1,13 @@
-// Section 4, Lecture 36 - Indecision State: Part I
+// Section 4, Lecture 37 - Indecision State: Part II
 
 class IndecsionApp extends React.Component {
   constructor(props) {
     super(props);
     this.handleDeleteOptions = this.handleDeleteOptions.bind(this);
     this.handlePick = this.handlePick.bind(this);
+    this.handleAddOption = this.handleAddOption.bind(this);
     this.state = {
-      options: ["Thing One", "Thing Two", "Thing Three"]
+      options: []
     };
   }
 
@@ -25,13 +26,7 @@ class IndecsionApp extends React.Component {
     });
   }
 
-  // Challenge for Section 4, Lecture 36
-  // Create new method handlePick - pass method down to Action 
-  // and set up onClick - bind here.
-  // handlePick will randomly pick and option and alert it.
-  // The logic already exists in jsx-indecision.js
-  // Also, delete the previous handlePick method in Action
-
+  // this will be passed to Action
   handlePick() {
     const randomNumber = Math.floor(Math.random() * this.state.options.length);
     const decision = this.state.options[randomNumber];
@@ -39,6 +34,29 @@ class IndecsionApp extends React.Component {
     // We are not changing the state,
     // so we don't need to use setState() here.
     return alert(decision);
+  }
+
+  // this will be passed to AddOption
+  // which will send up data to the IndecisionApp when this
+  // method is called
+  handleAddOption(option) {
+    // conditionals to block invalid option inputs
+    if (!option) {
+      return "Enter valid value to add item";
+    }
+    else if (this.state.options.indexOf(option) > -1) {
+      return "This option already exists";
+    }
+
+    this.setState((prevState) => {
+      // don't use .push() here.
+      // it directly alters the previous state's array
+      // which we don't want to do.
+      // Instead, use .concat() to return a new array
+      return {
+        options: prevState.options.concat(option)
+      };
+    });
   }
 
   render() {
@@ -57,7 +75,9 @@ class IndecsionApp extends React.Component {
           options={this.state.options} 
           handleDeleteOptions={this.handleDeleteOptions}
         />
-        <AddOption />
+        <AddOption 
+          handleAddOption={this.handleAddOption}
+        />
       </div>
     );
   }
@@ -97,10 +117,10 @@ class Options extends React.Component {
   render() {
     return (
       <div>
+        <button onClick={this.props.handleDeleteOptions}>Remove All</button>
         {
           this.props.options.map((option) => <Option key={option} optionText={option} />)
         }
-        <button onClick={this.props.handleDeleteOptions}>Remove All</button>
       </div>
     );
   }
@@ -119,22 +139,43 @@ class Option extends React.Component {
 class AddOption extends React.Component {
   // The method for the form. Remember it has to take in an argument
   // so we can use the event so we know what was passed in with the form.
+  // Even though e have a handleAddOption() in the parent component,
+  // we keep this method here in AddOption as because of the extra
+  // steps it needs to complete (eg preventDefault(), trim(), etc).
+
+  // We also need a constructor method here because of the 'this'
+  // and the handleAddOptions passing data.
+  constructor(props) {
+    super(props);
+    this.handleAddOption = this.handleAddOption.bind(this);
+
+    // we need a state for this individual component
+    // to track the error message
+    this.state = {
+      error: undefined
+    };
+  }
+  
   handleAddOption(e) {
     e.preventDefault();
 
-    // .trim() removes leading and trailing spaces
     let theOption = e.target.elements.theOption.value.trim();
-
-    if (theOption) {
-      alert(theOption);
-      e.target.elements.theOption.value = "";
-    }
+    const error = this.props.handleAddOption(theOption);
+    e.target.elements.theOption.value = "";
+    
+    this.setState(() => {
+      return {
+        // this is the same as error: error
+        error
+      };
+    });
     
   }
 
   render() {
     return (
       <div>
+        {this.state.error && <p>{this.state.error}</p>}
         <form onSubmit={this.handleAddOption}>
           <input type="text" name="theOption"/>
           <button>Add Option</button>

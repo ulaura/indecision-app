@@ -8,7 +8,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-// Section 4, Lecture 36 - Indecision State: Part I
+// Section 4, Lecture 37 - Indecision State: Part II
 
 var IndecsionApp = function (_React$Component) {
   _inherits(IndecsionApp, _React$Component);
@@ -20,8 +20,9 @@ var IndecsionApp = function (_React$Component) {
 
     _this.handleDeleteOptions = _this.handleDeleteOptions.bind(_this);
     _this.handlePick = _this.handlePick.bind(_this);
+    _this.handleAddOption = _this.handleAddOption.bind(_this);
     _this.state = {
-      options: ["Thing One", "Thing Two", "Thing Three"]
+      options: []
     };
     return _this;
   }
@@ -45,12 +46,7 @@ var IndecsionApp = function (_React$Component) {
       });
     }
 
-    // Challenge for Section 4, Lecture 36
-    // Create new method handlePick - pass method down to Action 
-    // and set up onClick - bind here.
-    // handlePick will randomly pick and option and alert it.
-    // The logic already exists in jsx-indecision.js
-    // Also, delete the previous handlePick method in Action
+    // this will be passed to Action
 
   }, {
     key: "handlePick",
@@ -61,6 +57,31 @@ var IndecsionApp = function (_React$Component) {
       // We are not changing the state,
       // so we don't need to use setState() here.
       return alert(decision);
+    }
+
+    // this will be passed to AddOption
+    // which will send up data to the IndecisionApp when this
+    // method is called
+
+  }, {
+    key: "handleAddOption",
+    value: function handleAddOption(option) {
+      // conditionals to block invalid option inputs
+      if (!option) {
+        return "Enter valid value to add item";
+      } else if (this.state.options.indexOf(option) > -1) {
+        return "This option already exists";
+      }
+
+      this.setState(function (prevState) {
+        // don't use .push() here.
+        // it directly alters the previous state's array
+        // which we don't want to do.
+        // Instead, use .concat() to return a new array
+        return {
+          options: prevState.options.concat(option)
+        };
+      });
     }
   }, {
     key: "render",
@@ -80,7 +101,9 @@ var IndecsionApp = function (_React$Component) {
           options: this.state.options,
           handleDeleteOptions: this.handleDeleteOptions
         }),
-        React.createElement(AddOption, null)
+        React.createElement(AddOption, {
+          handleAddOption: this.handleAddOption
+        })
       );
     }
   }]);
@@ -169,14 +192,14 @@ var Options = function (_React$Component4) {
       return React.createElement(
         "div",
         null,
-        this.props.options.map(function (option) {
-          return React.createElement(Option, { key: option, optionText: option });
-        }),
         React.createElement(
           "button",
           { onClick: this.props.handleDeleteOptions },
           "Remove All"
-        )
+        ),
+        this.props.options.map(function (option) {
+          return React.createElement(Option, { key: option, optionText: option });
+        })
       );
     }
   }]);
@@ -211,27 +234,44 @@ var Option = function (_React$Component5) {
 var AddOption = function (_React$Component6) {
   _inherits(AddOption, _React$Component6);
 
-  function AddOption() {
+  // The method for the form. Remember it has to take in an argument
+  // so we can use the event so we know what was passed in with the form.
+  // Even though e have a handleAddOption() in the parent component,
+  // we keep this method here in AddOption as because of the extra
+  // steps it needs to complete (eg preventDefault(), trim(), etc).
+
+  // We also need a constructor method here because of the 'this'
+  // and the handleAddOptions passing data.
+  function AddOption(props) {
     _classCallCheck(this, AddOption);
 
-    return _possibleConstructorReturn(this, (AddOption.__proto__ || Object.getPrototypeOf(AddOption)).apply(this, arguments));
+    var _this6 = _possibleConstructorReturn(this, (AddOption.__proto__ || Object.getPrototypeOf(AddOption)).call(this, props));
+
+    _this6.handleAddOption = _this6.handleAddOption.bind(_this6);
+
+    // we need a state for this individual component
+    // to track the error message
+    _this6.state = {
+      error: undefined
+    };
+    return _this6;
   }
 
   _createClass(AddOption, [{
     key: "handleAddOption",
-
-    // The method for the form. Remember it has to take in an argument
-    // so we can use the event so we know what was passed in with the form.
     value: function handleAddOption(e) {
       e.preventDefault();
 
-      // .trim() removes leading and trailing spaces
       var theOption = e.target.elements.theOption.value.trim();
+      var error = this.props.handleAddOption(theOption);
+      e.target.elements.theOption.value = "";
 
-      if (theOption) {
-        alert(theOption);
-        e.target.elements.theOption.value = "";
-      }
+      this.setState(function () {
+        return {
+          // this is the same as error: error
+          error: error
+        };
+      });
     }
   }, {
     key: "render",
@@ -239,6 +279,11 @@ var AddOption = function (_React$Component6) {
       return React.createElement(
         "div",
         null,
+        this.state.error && React.createElement(
+          "p",
+          null,
+          this.state.error
+        ),
         React.createElement(
           "form",
           { onSubmit: this.handleAddOption },
