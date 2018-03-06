@@ -1,3 +1,6 @@
+// Challenge for Section 5, Lecture 41
+// count - set up default prop value to 0
+
 class Counter extends React.Component {
   constructor(props) {
     super(props);
@@ -7,7 +10,7 @@ class Counter extends React.Component {
 
     // setting the default state
     this.state = {
-      count: 0
+      count: props.count
     }
   }
 
@@ -59,42 +62,9 @@ class Counter extends React.Component {
   }
 }
 
-ReactDOM.render(<Counter />, document.getElementById("app"));
+Counter.defaultProps = {
+  count: 0
+}
 
-// // Code from Section 3, Lecture 17
-// let count = 0;
-
-// // for the onClick functions in templateTwo
-// const addOne = () => {
-//   count++;
-//   renderCounterApp();
-// };
-
-// const minusOne = () => {
-//   // subtract 1 from count and rerender
-//   count--;
-//   renderCounterApp();
-// };
-
-// const reset = () => {
-//   // reset the count and rerender
-//   count = 0;
-//   renderCounterApp();
-// };
-
-
-
-// const renderCounterApp = () => {
-//   const templateTwo = (
-//     <div>
-//       <h1>Count: {count}</h1>
-//       <button onClick={addOne}>+1</button>
-//       <button onClick={minusOne}>-1</button>
-//       <button onClick={reset}>RESET</button> 
-//     </div>
-//   );
-
-//   ReactDOM.render(templateTwo, appRoot);
-// };
-
-// renderCounterApp();
+{/* We can pass in count here as props to override the default */}
+ReactDOM.render(<Counter count={1000}/>, document.getElementById("app"));

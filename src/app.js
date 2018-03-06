@@ -1,17 +1,4 @@
-// Section 5, Lecture 40 - The Stateless Functional Component
-
-// These components are just as written:
-// they don't have a state, they are written as a function,
-// and they are components.
-// These components only affect the presentation of the app and
-// don't manage state data. 
-// They only have a render(){return)} function when written as
-// a class component.
-// See below for User class example.
-
-// Challenge for Section 5, Lecture 40
-// Convert Header, Options, and Option into 
-// functional stateless components
+// Section 5, Lecture 41 - Default Prop Values
 
 class IndecisionApp extends React.Component {
   constructor(props) {
@@ -20,7 +7,8 @@ class IndecisionApp extends React.Component {
     this.handlePick = this.handlePick.bind(this);
     this.handleAddOption = this.handleAddOption.bind(this);
     this.state = {
-      options: []
+      // Class based components can have default props, too
+      options: props.options
     };
   }
 
@@ -73,12 +61,11 @@ class IndecisionApp extends React.Component {
   }
 
   render() {
-    const title = "Indecision";
     const subtitle = "Put your life in the hands of a computer";
 
     return (
       <div>
-        <Header title={title} subtitle={subtitle}/>
+        <Header subtitle={subtitle}/>
         {/* will only render if there are options in the array */}
         <Action 
           hasOptions={this.state.options.length > 0}
@@ -96,25 +83,27 @@ class IndecisionApp extends React.Component {
   }
 }
 
+// Class based components can have default props, too
+IndecisionApp.defaultProps = {
+  options: []
+};
+
+// A functional stateless component
 const Header = (props) => {
   return (
     <div>
       <h1>{props.title}</h1>
-      <h2>{props.subtitle}</h2>
+      {/* Conditional rendering for the subtitle */}
+      {props.subtitle && <h2>{props.subtitle}</h2>}
     </div>
   );
 };
 
-// class Header extends React.Component{
-//   render() {
-//     return (
-//       <div>
-//         <h1>{this.props.title}</h1>
-//         <h2>{this.props.subtitle}</h2>
-//       </div>
-//     );
-//   }
-// }
+// default prop values for Header
+// It's just an object
+Header.defaultProps = {
+  title: "Indeision"
+}
 
 const Action = (props) => {
   return (
@@ -122,7 +111,7 @@ const Action = (props) => {
       <button 
         /* Passing IndecisionApp's method handlePick as a prop in onClick */
         onClick={props.handlePick}
-        /* If this.props.hasOptions is false, there are no
+        /* If props.hasOptions is false, there are no
             options in this.state.options and this button should
             be disabled */
         disabled={!props.hasOptions}
@@ -132,25 +121,6 @@ const Action = (props) => {
     </div>
   );
 };
-
-// class Action extends React.Component {
-//   render() {
-//     return (
-//       <div>
-//         <button 
-//           /* Passing IndecisionApp's method handlePick as a prop in onClick */
-//           onClick={this.props.handlePick}
-//           /* If this.props.hasOptions is false, there are no
-//               options in this.state.options and this button should
-//               be disabled */
-//           disabled={!this.props.hasOptions}
-//         >
-//             What should I do?
-//         </button>
-//       </div>
-//     );
-//   }
-// }
 
 const Options = (props) => {
   return (
@@ -163,19 +133,6 @@ const Options = (props) => {
   );
 };
 
-// class Options extends React.Component {
-//   render() {
-//     return (
-//       <div>
-//         <button onClick={this.props.handleDeleteOptions}>Remove All</button>
-//         {
-//           this.props.options.map((option) => <Option key={option} optionText={option} />)
-//         }
-//       </div>
-//     );
-//   }
-// }
-
 const Option = (props) => {
   return (
     <div>
@@ -183,16 +140,6 @@ const Option = (props) => {
     </div>
   );
 };
-
-// class Option extends React.Component {
-//   render() {
-//     return (
-//       <div>
-//         Option: {this.props.optionText}
-//       </div>
-//     );
-//   }
-// }
 
 class AddOption extends React.Component {
   // The method for the form. Remember it has to take in an argument
@@ -243,21 +190,5 @@ class AddOption extends React.Component {
   }
 }
 
-// stateless functional components follow the same naming convenction
-// for React components. First letter gets capitalized.
-// The function acts like a render() function, so we skip render()
-// and just return the jsx. 
-
-// Functional stateless components don't allow for 'this' because
-// there is no state, so props gets passed
-// directly as an argument in the function.
-const User = (props) => {
-  return (
-    <div>
-      <p>Name: {props.name}</p>
-      <p>Age: </p>
-    </div>
-  );
-};
-
+{/* We can pass in options as a prop here to override the default */}
 ReactDOM.render(<IndecisionApp />, document.getElementById("app"));
