@@ -13,49 +13,17 @@ class IndecisionApp extends React.Component {
     };
   }
 
-  // props can send data from parent class to child class, but not
-  // the other way around. 
-  // Passing methods as props for children to use allows them to 
-  // send data back up to the parent via props.
-
   // handleDeleteOptions lives in IndecisionApp,
   // but will be passed to and called by Options.
   handleDeleteOptions() {
-    // this.setState(() => {
-    //   return {
-    //     options: []
-    //   };
-    // });
-
-    // a shorter way to implicitly return objects.
-    // note that the curly braces need to be surrounded
-    // by parentheses for React to know it's returning an object
-    // and not a function body (if we just used curly braces)
     this.setState(() => ({ options: [] }));
   }
-
-  // Challenge for Section 5, Lecture 53:
-  // Change the syntax for this.setState to
-  // the shorter syntax in handleAddOption() and 
-  // the handleAddOption() inside AddOption class
-
 
   // this method is for deleting ONE option
   // this will be passed to Options, 
   // which will then pass it down to Option
   handleDeleteOption(optionToRemove) {
     this.setState((prevState) => ({
-      // .filter() creates a new array of items that return true for
-      // the conditions set. 
-      // Here we want to delete an option from the array, so we check
-      // if it is NOT equal to the argument passed in. 
-      // If it's equal, it returns false, and it gets deleted. 
-
-      // options: prevState.options.filter((option) => {
-      //   return optionToRemove !== option;
-      // })
-
-      // implicit return
       options: prevState.options.filter((option) => optionToRemove !== option)
     }));
   }
@@ -85,17 +53,6 @@ class IndecisionApp extends React.Component {
     this.setState((prevState) => ({ 
       options: prevState.options.concat(option) 
     }));
-
-    // this.setState((prevState) => {
-    //   // don't use .push() here.
-    //   // it directly alters the previous state's array
-    //   // which we don't want to do.
-    //   // Instead, use .concat() to return a new array
-    //   return {
-    //     options: prevState.options.concat(option)
-    //   };
-    // });
-
   }
 
   render() {
@@ -104,7 +61,8 @@ class IndecisionApp extends React.Component {
     return (
       <div>
         <Header subtitle={subtitle}/>
-        {/* will only render if there are options in the array */}
+        {/* Action will only render an available button 
+            if there are options in the array */}
         <Action 
           hasOptions={this.state.options.length > 0}
           handlePick={this.handlePick}
@@ -208,8 +166,8 @@ class AddOption extends React.Component {
     super(props);
     this.handleAddOption = this.handleAddOption.bind(this);
 
-    // we need a state for this individual component
-    // to track the error message
+    // We need a state for this individual component
+    // to track the error message.
     this.state = {
       error: undefined
     };
@@ -223,14 +181,7 @@ class AddOption extends React.Component {
     e.target.elements.theOption.value = "";
     
     // { error } is the same as { error: error }
-    this.setState(() => ({ error }));
-    // this.setState(() => {
-    //   return {
-    //     // this is the same as error: error
-    //     error
-    //   };
-    // });
-    
+    this.setState(() => ({ error }));    
   }
 
   render() {

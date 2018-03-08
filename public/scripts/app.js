@@ -29,11 +29,6 @@ var IndecisionApp = function (_React$Component) {
     return _this;
   }
 
-  // props can send data from parent class to child class, but not
-  // the other way around. 
-  // Passing methods as props for children to use allows them to 
-  // send data back up to the parent via props.
-
   // handleDeleteOptions lives in IndecisionApp,
   // but will be passed to and called by Options.
 
@@ -41,26 +36,10 @@ var IndecisionApp = function (_React$Component) {
   _createClass(IndecisionApp, [{
     key: "handleDeleteOptions",
     value: function handleDeleteOptions() {
-      // this.setState(() => {
-      //   return {
-      //     options: []
-      //   };
-      // });
-
-      // a shorter way to implicitly return objects.
-      // note that the curly braces need to be surrounded
-      // by parentheses for React to know it's returning an object
-      // and not a function body (if we just used curly braces)
       this.setState(function () {
         return { options: [] };
       });
     }
-
-    // Challenge for Section 5, Lecture 53:
-    // Change the syntax for this.setState to
-    // the shorter syntax in handleAddOption() and 
-    // the handleAddOption() inside AddOption class
-
 
     // this method is for deleting ONE option
     // this will be passed to Options, 
@@ -71,17 +50,6 @@ var IndecisionApp = function (_React$Component) {
     value: function handleDeleteOption(optionToRemove) {
       this.setState(function (prevState) {
         return {
-          // .filter() creates a new array of items that return true for
-          // the conditions set. 
-          // Here we want to delete an option from the array, so we check
-          // if it is NOT equal to the argument passed in. 
-          // If it's equal, it returns false, and it gets deleted. 
-
-          // options: prevState.options.filter((option) => {
-          //   return optionToRemove !== option;
-          // })
-
-          // implicit return
           options: prevState.options.filter(function (option) {
             return optionToRemove !== option;
           })
@@ -121,16 +89,6 @@ var IndecisionApp = function (_React$Component) {
           options: prevState.options.concat(option)
         };
       });
-
-      // this.setState((prevState) => {
-      //   // don't use .push() here.
-      //   // it directly alters the previous state's array
-      //   // which we don't want to do.
-      //   // Instead, use .concat() to return a new array
-      //   return {
-      //     options: prevState.options.concat(option)
-      //   };
-      // });
     }
   }, {
     key: "render",
@@ -267,8 +225,8 @@ var AddOption = function (_React$Component2) {
 
     _this2.handleAddOption = _this2.handleAddOption.bind(_this2);
 
-    // we need a state for this individual component
-    // to track the error message
+    // We need a state for this individual component
+    // to track the error message.
     _this2.state = {
       error: undefined
     };
@@ -288,12 +246,6 @@ var AddOption = function (_React$Component2) {
       this.setState(function () {
         return { error: error };
       });
-      // this.setState(() => {
-      //   return {
-      //     // this is the same as error: error
-      //     error
-      //   };
-      // });
     }
   }, {
     key: "render",
