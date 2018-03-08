@@ -1,4 +1,4 @@
-// Section 5, Lecture 41 - Default Prop Values
+// Section 5, Lecture 53 - Removing Individual Options
 
 class IndecisionApp extends React.Component {
   constructor(props) {
@@ -6,6 +6,7 @@ class IndecisionApp extends React.Component {
     this.handleDeleteOptions = this.handleDeleteOptions.bind(this);
     this.handlePick = this.handlePick.bind(this);
     this.handleAddOption = this.handleAddOption.bind(this);
+    this.handleDeleteOption = this.handleDeleteOption.bind(this);
     this.state = {
       // Class based components can have default props, too
       options: props.options
@@ -20,11 +21,43 @@ class IndecisionApp extends React.Component {
   // handleDeleteOptions lives in IndecisionApp,
   // but will be passed to and called by Options.
   handleDeleteOptions() {
-    this.setState(() => {
-      return {
-        options: []
-      };
-    });
+    // this.setState(() => {
+    //   return {
+    //     options: []
+    //   };
+    // });
+
+    // a shorter way to implicitly return objects.
+    // note that the curly braces need to be surrounded
+    // by parentheses for React to know it's returning an object
+    // and not a function body (if we just used curly braces)
+    this.setState(() => ({ options: [] }));
+  }
+
+  // Challenge for Section 5, Lecture 53:
+  // Change the syntax for this.setState to
+  // the shorter syntax in handleAddOption() and 
+  // the handleAddOption() inside AddOption class
+
+
+  // this method is for deleting ONE option
+  // this will be passed to Options, 
+  // which will then pass it down to Option
+  handleDeleteOption(optionToRemove) {
+    this.setState((prevState) => ({
+      // .filter() creates a new array of items that return true for
+      // the conditions set. 
+      // Here we want to delete an option from the array, so we check
+      // if it is NOT equal to the argument passed in. 
+      // If it's equal, it returns false, and it gets deleted. 
+
+      // options: prevState.options.filter((option) => {
+      //   return optionToRemove !== option;
+      // })
+
+      // implicit return
+      options: prevState.options.filter((option) => optionToRemove !== option)
+    }));
   }
 
   // this will be passed to Action
@@ -49,15 +82,20 @@ class IndecisionApp extends React.Component {
       return "This option already exists";
     }
 
-    this.setState((prevState) => {
-      // don't use .push() here.
-      // it directly alters the previous state's array
-      // which we don't want to do.
-      // Instead, use .concat() to return a new array
-      return {
-        options: prevState.options.concat(option)
-      };
-    });
+    this.setState((prevState) => ({ 
+      options: prevState.options.concat(option) 
+    }));
+
+    // this.setState((prevState) => {
+    //   // don't use .push() here.
+    //   // it directly alters the previous state's array
+    //   // which we don't want to do.
+    //   // Instead, use .concat() to return a new array
+    //   return {
+    //     options: prevState.options.concat(option)
+    //   };
+    // });
+
   }
 
   render() {
@@ -74,6 +112,7 @@ class IndecisionApp extends React.Component {
         <Options 
           options={this.state.options} 
           handleDeleteOptions={this.handleDeleteOptions}
+          handleDeleteOption={this.handleDeleteOption}
         />
         <AddOption 
           handleAddOption={this.handleAddOption}
@@ -127,7 +166,13 @@ const Options = (props) => {
     <div>
       <button onClick={props.handleDeleteOptions}>Remove All</button>
       {
-        props.options.map((option) => <Option key={option} optionText={option} />)
+        props.options.map((option) => (
+          <Option 
+            key={option} 
+            optionText={option} 
+            handleDeleteOption={props.handleDeleteOption}
+          />
+      ))
       }
     </div>
   );
@@ -137,6 +182,15 @@ const Option = (props) => {
   return (
     <div>
       Option: {props.optionText}
+      <button 
+        // writing an arrow function in onClick like this allows us to
+        // access optionText with handleDeleteOption
+        onClick={(e) => {
+          props.handleDeleteOption(props.optionText);
+        }}
+      >
+        Remove
+      </button>
     </div>
   );
 };
@@ -168,12 +222,14 @@ class AddOption extends React.Component {
     const error = this.props.handleAddOption(theOption);
     e.target.elements.theOption.value = "";
     
-    this.setState(() => {
-      return {
-        // this is the same as error: error
-        error
-      };
-    });
+    // { error } is the same as { error: error }
+    this.setState(() => ({ error }));
+    // this.setState(() => {
+    //   return {
+    //     // this is the same as error: error
+    //     error
+    //   };
+    // });
     
   }
 
