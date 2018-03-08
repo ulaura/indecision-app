@@ -1,4 +1,4 @@
-// Section 5, Lecture 53 - Removing Individual Options
+// Section 5, Lecture 43 - Removing Individual Options
 
 class IndecisionApp extends React.Component {
   constructor(props) {
