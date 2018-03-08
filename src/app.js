@@ -1,4 +1,14 @@
-// Section 5, Lecture 43 - Removing Individual Options
+// Section 5, Lecture 44 - Lifecycle Methods
+
+// Lifecycle methods built-in functions that are only available 
+// to class based components.
+// They fire at various times within a component's life.
+// Examples: When a component first gets rendered to a screen,
+// when it gets removed from the screen, 
+// when something in the component gets updated like the state or props.
+// There are several lifecycle methods beyond the ones presented here.
+
+// If you need a lifecycle method, you have to use a class component.
 
 class IndecisionApp extends React.Component {
   constructor(props) {
@@ -11,6 +21,29 @@ class IndecisionApp extends React.Component {
       // Class based components can have default props, too
       options: props.options
     };
+  }
+
+  // A lifecycle method available to class components.
+  // This is called implicitly. It NEVER gets called explicitly. 
+  componentDidMount() {
+    console.log("componentDidMount");
+  }
+
+  // A lifecycle method that automatically fires when the component updates.
+  // This method has access to this.state and this.props
+  // and arguments to the previous props and previous states.
+  // It can be used to see what specific part of a component changed
+  // and compare it to the previous data.
+  componentDidUpdate(prevProps, prevState) {
+    console.log("componentDidUpdate");
+  }
+
+  // This lifecycle method fires right before a component goes away. 
+  // Where this is written in our app, it will only fire when
+  // the entire Indecision component is removed, like if we were
+  // to create a second page we can navigate to. 
+  componentWillUnmount() {
+    console.log("componentWillUnmount");
   }
 
   // handleDeleteOptions lives in IndecisionApp,

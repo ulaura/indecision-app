@@ -8,7 +8,17 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-// Section 5, Lecture 43 - Removing Individual Options
+// Section 5, Lecture 44 - Lifecycle Methods
+
+// Lifecycle methods built-in functions that are only available 
+// to class based components.
+// They fire at various times within a component's life.
+// Examples: When a component first gets rendered to a screen,
+// when it gets removed from the screen, 
+// when something in the component gets updated like the state or props.
+// There are several lifecycle methods beyond the ones presented here.
+
+// If you need a lifecycle method, you have to use a class component.
 
 var IndecisionApp = function (_React$Component) {
   _inherits(IndecisionApp, _React$Component);
@@ -29,11 +39,43 @@ var IndecisionApp = function (_React$Component) {
     return _this;
   }
 
-  // handleDeleteOptions lives in IndecisionApp,
-  // but will be passed to and called by Options.
+  // A lifecycle method available to class components.
+  // This is called implicitly. It NEVER gets called explicitly. 
 
 
   _createClass(IndecisionApp, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      console.log("componentDidMount");
+    }
+
+    // A lifecycle method that automatically fires when the component updates.
+    // This method has access to this.state and this.props
+    // and arguments to the previous props and previous states.
+    // It can be used to see what specific part of a component changed
+    // and compare it to the previous data.
+
+  }, {
+    key: "componentDidUpdate",
+    value: function componentDidUpdate(prevProps, prevState) {
+      console.log("componentDidUpdate");
+    }
+
+    // This lifecycle method fires right before a component goes away. 
+    // Where this is written in our app, it will only fire when
+    // the entire Indecision component is removed, like if we were
+    // to create a second page we can navigate to. 
+
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      console.log("componentWillUnmount");
+    }
+
+    // handleDeleteOptions lives in IndecisionApp,
+    // but will be passed to and called by Options.
+
+  }, {
     key: "handleDeleteOptions",
     value: function handleDeleteOptions() {
       this.setState(function () {
