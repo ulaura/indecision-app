@@ -8,314 +8,147 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-// Section 5, Lecture 44 - Lifecycle Methods
+// Section 5, Lecture 46 - Saving and Loading the Count
 
-// Lifecycle methods built-in functions that are only available 
-// to class based components.
-// They fire at various times within a component's life.
-// Examples: When a component first gets rendered to a screen,
-// when it gets removed from the screen, 
-// when something in the component gets updated like the state or props.
-// There are several lifecycle methods beyond the ones presented here.
+// This whole part is a challenge:
+// Use localStorage and lifecycle methods to add data persistence
+// to counter-example.
 
-// If you need a lifecycle method, you have to use a class component.
+// The user should be able to count up and down like normal,
+// but also be able to refresh or close the tab (not the window), 
+// reopen the tab, and pick up right where they left off.
 
-var IndecisionApp = function (_React$Component) {
-  _inherits(IndecisionApp, _React$Component);
+// Note: We don't need to use JSON.stringfy() or JSON.parse() here,
+// but the numbers will be returned as strings, which will cause errors
+// if we don't conver them back to numbers properly. 
 
-  function IndecisionApp(props) {
-    _classCallCheck(this, IndecisionApp);
+// Use parseInt() to convert back to a number.
+// "NaN" means Not a Number. This will be returned if you're trying to
+// use strings in math functions, etc.
+// isNaN() checks if it's a number or not. true = not number, false = is number.
 
-    var _this = _possibleConstructorReturn(this, (IndecisionApp.__proto__ || Object.getPrototypeOf(IndecisionApp)).call(this, props));
 
-    _this.handleDeleteOptions = _this.handleDeleteOptions.bind(_this);
-    _this.handlePick = _this.handlePick.bind(_this);
-    _this.handleAddOption = _this.handleAddOption.bind(_this);
-    _this.handleDeleteOption = _this.handleDeleteOption.bind(_this);
+var Counter = function (_React$Component) {
+  _inherits(Counter, _React$Component);
+
+  function Counter(props) {
+    _classCallCheck(this, Counter);
+
+    var _this = _possibleConstructorReturn(this, (Counter.__proto__ || Object.getPrototypeOf(Counter)).call(this, props));
+
+    _this.handleAddOne = _this.handleAddOne.bind(_this);
+    _this.handleMinusOne = _this.handleMinusOne.bind(_this);
+    _this.handleReset = _this.handleReset.bind(_this);
+
+    // setting the default state
     _this.state = {
-      // Class based components can have default props, too
-      options: props.options
+      count: 0
     };
     return _this;
   }
 
-  // A lifecycle method available to class components.
-  // This is called implicitly. It NEVER gets called explicitly. 
-
-
-  _createClass(IndecisionApp, [{
+  _createClass(Counter, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      console.log("fetching data");
+      console.log("componentDidMount");
+
+      var json = localStorage.getItem("count"); // returns null initially
+
+      // parseInt() takes two arguements: 
+      // a string, and the base you're counting in.
+      var leftOff = parseInt(json, 10); // parseInt(null) returns NaN
+
+      // This won't run if leftOff is NaN because localStorage was null.
+      // This can be tested by manually changing localStorage to
+      // null or even a string value and then refreshing the page. 
+      // It should return count to the default 0. 
+      if (!isNaN(leftOff)) {
+        this.setState(function () {
+          return { count: json };
+        });
+      }
     }
-
-    // A lifecycle method that automatically fires when the component updates.
-    // This method has access to this.state and this.props
-    // and arguments to the previous props and previous states.
-    // It can be used to see what specific part of a component changed
-    // and compare it to the previous data.
-
   }, {
     key: "componentDidUpdate",
     value: function componentDidUpdate(prevProps, prevState) {
-      console.log("saving data");
-    }
-
-    // This lifecycle method fires right before a component goes away. 
-    // Where this is written in our app, it will only fire when
-    // the entire Indecision component is removed, like if we were
-    // to create a second page we can navigate to. 
-
-  }, {
-    key: "componentWillUnmount",
-    value: function componentWillUnmount() {
-      console.log("componentWillUnmount");
-    }
-
-    // handleDeleteOptions lives in IndecisionApp,
-    // but will be passed to and called by Options.
-
-  }, {
-    key: "handleDeleteOptions",
-    value: function handleDeleteOptions() {
-      this.setState(function () {
-        return { options: [] };
-      });
-    }
-
-    // this method is for deleting ONE option
-    // this will be passed to Options, 
-    // which will then pass it down to Option
-
-  }, {
-    key: "handleDeleteOption",
-    value: function handleDeleteOption(optionToRemove) {
-      this.setState(function (prevState) {
-        return {
-          options: prevState.options.filter(function (option) {
-            return optionToRemove !== option;
-          })
-        };
-      });
-    }
-
-    // this will be passed to Action
-
-  }, {
-    key: "handlePick",
-    value: function handlePick() {
-      var randomNumber = Math.floor(Math.random() * this.state.options.length);
-      var decision = this.state.options[randomNumber];
-
-      // We are not changing the state,
-      // so we don't need to use setState() here.
-      return alert(decision);
-    }
-
-    // this will be passed to AddOption
-    // which will send up data to the IndecisionApp when this
-    // method is called
-
-  }, {
-    key: "handleAddOption",
-    value: function handleAddOption(option) {
-      // conditionals to block invalid option inputs
-      if (!option) {
-        return "Enter valid value to add item";
-      } else if (this.state.options.indexOf(option) > -1) {
-        return "This option already exists";
+      // the only time this method will run is 
+      // if prevState.count is not the same as this.state.count.
+      // This prevents the RESET button from activating the method
+      // when the count was already at 0 to begin with. 
+      if (prevState.count !== this.state.count) {
+        localStorage.setItem("count", this.state.count);
+        console.log("componentDidUpdate");
       }
+    }
+  }, {
+    key: "handleAddOne",
+    value: function handleAddOne() {
+      // // this adds one to count, but it does not update the state.
+      // this.state.count++;
+      // console.log(this.state);
 
+      // To update the state, this.setState() has to be called
+      // and then the specific previous state value that needs to change 
+      // has to be passed as an argument to be manipulated
       this.setState(function (prevState) {
         return {
-          options: prevState.options.concat(option)
+          count: prevState.count + 1
+        };
+      });
+    }
+  }, {
+    key: "handleMinusOne",
+    value: function handleMinusOne() {
+      this.setState(function (prevState) {
+        return {
+          count: prevState.count - 1
+        };
+      });
+    }
+  }, {
+    key: "handleReset",
+    value: function handleReset() {
+      // Because handleReset brings the count to 0 no matter what,
+      // we don't care about the previous state, so we don't have
+      // to pass any arguments in this.setState()
+      this.setState(function () {
+        return {
+          count: 0
         };
       });
     }
   }, {
     key: "render",
     value: function render() {
-      var subtitle = "Put your life in the hands of a computer";
-
       return React.createElement(
         "div",
         null,
-        React.createElement(Header, { subtitle: subtitle }),
-        React.createElement(Action, {
-          hasOptions: this.state.options.length > 0,
-          handlePick: this.handlePick
-        }),
-        React.createElement(Options, {
-          options: this.state.options,
-          handleDeleteOptions: this.handleDeleteOptions,
-          handleDeleteOption: this.handleDeleteOption
-        }),
-        React.createElement(AddOption, {
-          handleAddOption: this.handleAddOption
-        })
-      );
-    }
-  }]);
-
-  return IndecisionApp;
-}(React.Component);
-
-// Class based components can have default props, too
-
-
-IndecisionApp.defaultProps = {
-  options: []
-};
-
-// A functional stateless component
-var Header = function Header(props) {
-  return React.createElement(
-    "div",
-    null,
-    React.createElement(
-      "h1",
-      null,
-      props.title
-    ),
-    props.subtitle && React.createElement(
-      "h2",
-      null,
-      props.subtitle
-    )
-  );
-};
-
-// default prop values for Header
-// It's just an object
-Header.defaultProps = {
-  title: "Indeision"
-};
-
-var Action = function Action(props) {
-  return React.createElement(
-    "div",
-    null,
-    React.createElement(
-      "button",
-      {
-        /* Passing IndecisionApp's method handlePick as a prop in onClick */
-        onClick: props.handlePick
-        /* If props.hasOptions is false, there are no
-            options in this.state.options and this button should
-            be disabled */
-        , disabled: !props.hasOptions
-      },
-      "What should I do?"
-    )
-  );
-};
-
-var Options = function Options(props) {
-  return React.createElement(
-    "div",
-    null,
-    React.createElement(
-      "button",
-      { onClick: props.handleDeleteOptions },
-      "Remove All"
-    ),
-    props.options.map(function (option) {
-      return React.createElement(Option, {
-        key: option,
-        optionText: option,
-        handleDeleteOption: props.handleDeleteOption
-      });
-    })
-  );
-};
-
-var Option = function Option(props) {
-  return React.createElement(
-    "div",
-    null,
-    "Option: ",
-    props.optionText,
-    React.createElement(
-      "button",
-      {
-        // writing an arrow function in onClick like this allows us to
-        // access optionText with handleDeleteOption
-        onClick: function onClick(e) {
-          props.handleDeleteOption(props.optionText);
-        }
-      },
-      "Remove"
-    )
-  );
-};
-
-var AddOption = function (_React$Component2) {
-  _inherits(AddOption, _React$Component2);
-
-  // The method for the form. Remember it has to take in an argument
-  // so we can use the event so we know what was passed in with the form.
-  // Even though e have a handleAddOption() in the parent component,
-  // we keep this method here in AddOption as because of the extra
-  // steps it needs to complete (eg preventDefault(), trim(), etc).
-
-  // We also need a constructor method here because of the 'this'
-  // and the handleAddOptions passing data.
-  function AddOption(props) {
-    _classCallCheck(this, AddOption);
-
-    var _this2 = _possibleConstructorReturn(this, (AddOption.__proto__ || Object.getPrototypeOf(AddOption)).call(this, props));
-
-    _this2.handleAddOption = _this2.handleAddOption.bind(_this2);
-
-    // We need a state for this individual component
-    // to track the error message.
-    _this2.state = {
-      error: undefined
-    };
-    return _this2;
-  }
-
-  _createClass(AddOption, [{
-    key: "handleAddOption",
-    value: function handleAddOption(e) {
-      e.preventDefault();
-
-      var theOption = e.target.elements.theOption.value.trim();
-      var error = this.props.handleAddOption(theOption);
-      e.target.elements.theOption.value = "";
-
-      // { error } is the same as { error: error }
-      this.setState(function () {
-        return { error: error };
-      });
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      return React.createElement(
-        "div",
-        null,
-        this.state.error && React.createElement(
-          "p",
+        React.createElement(
+          "h1",
           null,
-          this.state.error
+          "Count: ",
+          this.state.count
         ),
         React.createElement(
-          "form",
-          { onSubmit: this.handleAddOption },
-          React.createElement("input", { type: "text", name: "theOption" }),
-          React.createElement(
-            "button",
-            null,
-            "Add Option"
-          )
+          "button",
+          { onClick: this.handleAddOne },
+          "+1"
+        ),
+        React.createElement(
+          "button",
+          { onClick: this.handleMinusOne },
+          "-1"
+        ),
+        React.createElement(
+          "button",
+          { onClick: this.handleReset },
+          "RESET"
         )
       );
     }
   }]);
 
-  return AddOption;
+  return Counter;
 }(React.Component);
 
-{/* We can pass in options as a prop here to override the default */}
-ReactDOM.render(React.createElement(IndecisionApp, null), document.getElementById("app"));
+ReactDOM.render(React.createElement(Counter, null), document.getElementById("app"));

@@ -1,14 +1,5 @@
-// Section 5, Lecture 44 - Lifecycle Methods
-
-// Lifecycle methods built-in functions that are only available 
-// to class based components.
-// They fire at various times within a component's life.
-// Examples: When a component first gets rendered to a screen,
-// when it gets removed from the screen, 
-// when something in the component gets updated like the state or props.
-// There are several lifecycle methods beyond the ones presented here.
-
-// If you need a lifecycle method, you have to use a class component.
+// Section 5, Lecture 45
+// Saving and Loading Options Data
 
 class IndecisionApp extends React.Component {
   constructor(props) {
@@ -18,30 +9,47 @@ class IndecisionApp extends React.Component {
     this.handleAddOption = this.handleAddOption.bind(this);
     this.handleDeleteOption = this.handleDeleteOption.bind(this);
     this.state = {
-      // Class based components can have default props, too
-      options: props.options
+      // Bringing back the default to an empty array.
+      // Since we're storing data in localStorage now,
+      // it doesn't make sense to let the user pass in a prop.
+      options: []
     };
   }
 
-  // A lifecycle method available to class components.
-  // This is called implicitly. It NEVER gets called explicitly. 
   componentDidMount() {
-    console.log("fetching data");
+    // using a try-catch block to handle errors involving invalid
+    // JSON data. If an error occurs, nothing will happen.
+    try {
+      // we are getting the JSON value for the key "options" (as a string)
+      // and then parsing it to change the value from a string
+      // back to an array
+      const json = localStorage.getItem("options");
+      const options = JSON.parse(json);
+
+      // this will run as long as localStorage is not null
+      if (options) {
+        // remember that ({ options }) is the same as
+        // typing ({ options: options })
+        this.setState(() => ({ options }));
+      }
+    }
+    catch (e) {
+      // Do nothing at all
+    }
   }
 
-  // A lifecycle method that automatically fires when the component updates.
-  // This method has access to this.state and this.props
-  // and arguments to the previous props and previous states.
-  // It can be used to see what specific part of a component changed
-  // and compare it to the previous data.
   componentDidUpdate(prevProps, prevState) {
-    console.log("saving data");
+    // if condition to check if the options array length changed
+    // that's the only time we want to save the data
+    if (prevState.options.length !== this.state.options.length) {
+      // storing the json version of the options array in a variable,
+      // and then saving it in localStorage.
+      const json = JSON.stringify(this.state.options);
+      localStorage.setItem("options", json);
+      console.log("saving data");
+    }
   }
 
-  // This lifecycle method fires right before a component goes away. 
-  // Where this is written in our app, it will only fire when
-  // the entire Indecision component is removed, like if we were
-  // to create a second page we can navigate to. 
   componentWillUnmount() {
     console.log("componentWillUnmount");
   }
@@ -113,11 +121,6 @@ class IndecisionApp extends React.Component {
   }
 }
 
-// Class based components can have default props, too
-IndecisionApp.defaultProps = {
-  options: []
-};
-
 // A functional stateless component
 const Header = (props) => {
   return (
@@ -156,6 +159,10 @@ const Options = (props) => {
   return (
     <div>
       <button onClick={props.handleDeleteOptions}>Remove All</button>
+
+      {/* The paragraph below only renders when there are no options stored. */}
+      {props.options.length === 0 && <p>Please add an option to get started!</p>}
+      
       {
         props.options.map((option) => (
           <Option 
@@ -211,10 +218,16 @@ class AddOption extends React.Component {
 
     let theOption = e.target.elements.theOption.value.trim();
     const error = this.props.handleAddOption(theOption);
-    e.target.elements.theOption.value = "";
     
     // { error } is the same as { error: error }
-    this.setState(() => ({ error }));    
+    this.setState(() => ({ error })); 
+
+    // Now, the input box will only clear if no error is thrown.
+    // It gives the user a chance to correct their mistake in their
+    // previous entry.
+    if (!error) {
+      e.target.elements.theOption.value = "";
+    }
   }
 
   render() {
@@ -230,5 +243,4 @@ class AddOption extends React.Component {
   }
 }
 
-{/* We can pass in options as a prop here to override the default */}
 ReactDOM.render(<IndecisionApp />, document.getElementById("app"));
