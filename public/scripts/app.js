@@ -46,7 +46,7 @@ var IndecisionApp = function (_React$Component) {
   _createClass(IndecisionApp, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      console.log("componentDidMount");
+      console.log("fetching data");
     }
 
     // A lifecycle method that automatically fires when the component updates.
@@ -58,7 +58,7 @@ var IndecisionApp = function (_React$Component) {
   }, {
     key: "componentDidUpdate",
     value: function componentDidUpdate(prevProps, prevState) {
-      console.log("componentDidUpdate");
+      console.log("saving data");
     }
 
     // This lifecycle method fires right before a component goes away. 

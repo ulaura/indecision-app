@@ -26,7 +26,7 @@ class IndecisionApp extends React.Component {
   // A lifecycle method available to class components.
   // This is called implicitly. It NEVER gets called explicitly. 
   componentDidMount() {
-    console.log("componentDidMount");
+    console.log("fetching data");
   }
 
   // A lifecycle method that automatically fires when the component updates.
@@ -35,7 +35,7 @@ class IndecisionApp extends React.Component {
   // It can be used to see what specific part of a component changed
   // and compare it to the previous data.
   componentDidUpdate(prevProps, prevState) {
-    console.log("componentDidUpdate");
+    console.log("saving data");
   }
 
   // This lifecycle method fires right before a component goes away. 
